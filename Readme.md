@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Андрей Карпов](https://up.htmlacademy.ru/ecmascript/11/user/480839).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Малинов](https://htmlacademy.ru/profile/id40204).
 
 ---
 

@@ -4,5 +4,9 @@ function getRandomInt(min, max) { // максимум не включается,
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-export {getRandomInt};
+function getRandomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+export {getRandomInt, getRandomDate};
 

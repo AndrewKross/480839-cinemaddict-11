@@ -11,6 +11,7 @@ const FILMS_COUNT = 20;
 const EXTRA_FILMS_COUNT = 2;
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
+const filmsData = getFilmsData(FILMS_COUNT);
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -26,7 +27,10 @@ render(main, createSiteMenuTemplate());
 
 const mainNavContainer = main.querySelector(`.main-navigation__items`);
 
-filters.forEach((filter) => {
+filters.forEach((filter) => { // пока что генерируем счетчики для фильтров тут, т.к. данные фильмов (filmsData) генерируются тут, а не в моках
+  filter.inWatchlist = filmsData.reduce((count, it) => it.inWatchlist ? count++ : count);
+  filter.inHistory = filmsData.reduce((count, it) => it.inHistory ? count++ : count);
+  filter.inFavorites = filmsData.reduce((count, it) => it.inFavorites ? count++ : count);
   render(mainNavContainer, createFilterMarkup(filter));
 });
 
@@ -35,7 +39,6 @@ const filmsList = films.querySelector(`.films-list`);
 const filmsListContainer = filmsList.querySelector(`.films-list__container`);
 
 let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
-const filmsData = getFilmsData(FILMS_COUNT);
 
 filmsData.slice(0, showingFilmsCount).forEach((film) => {
   render(filmsListContainer, createFilmCardTemplate(film));
@@ -66,7 +69,6 @@ loadMoreButton.addEventListener(`click`, () => {
     loadMoreButton.remove();
   }
 });
-
 
 render(footerStats, `<p>${FILMS_COUNT} movies inside</p>`);
 

@@ -1,6 +1,7 @@
 import {render} from "./main.js";
-import {createFilmDetailsTemplate} from "./components/film-details";
+import {createFilmDetailsTemplate, createCommentsTemplate} from "./components/film-details";
 import {getFilmsDetailsData} from "./mock/film-details.js";
+import {generateCommentsData} from "./mock/comments.js";
 
 export const activatePopup = () => {
   const body = document.querySelector(`body`);
@@ -15,6 +16,16 @@ export const activatePopup = () => {
 
     const filmDetailsSection = document.querySelector(`.film-details`);
     const closeButton = filmDetailsSection.querySelector(`.film-details__close-btn`);
+    const commentsCounter = filmDetailsSection.querySelector(`.film-details__comments-count`);
+    const commentsList = filmDetailsSection.querySelector(`.film-details__comments-list`);
+    const COMMENTS_COUNT = 4;
+    const comments = generateCommentsData(COMMENTS_COUNT);
+    commentsCounter.textContent = comments.length;
+
+    comments.forEach((comment) => {
+      render(commentsList, createCommentsTemplate(comment));
+    });
+
 
     closeButton.onclick = () => {
       filmDetailsSection.remove();

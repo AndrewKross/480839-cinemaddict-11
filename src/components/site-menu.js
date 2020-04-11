@@ -1,11 +1,15 @@
-export const createSiteMenuTemplate = () => {
+const createFilterMarkup = (filter) => {
+  const {name, id, count, isActive} = filter;
+  const activeClass = `main-navigation__item--active`;
+  return (
+    `<a href="#${id}" class="main-navigation__item ${isActive ? activeClass : ``}">${name}${count ? `<span class="main-navigation__item-count">` + count + `</span>` : ``}</a>`
+  );
+};
+
+const createSiteMenuTemplate = () => {
   return (
     `<nav class="main-navigation">
-    <div class="main-navigation__items">
-      <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-      <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">13</span></a>
-      <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">4</span></a>
-      <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">8</span></a>
+    <div class="main-navigation__items">  
     </div>
     <a href="#stats" class="main-navigation__additional">Stats</a>
     </nav>
@@ -24,3 +28,5 @@ export const createSiteMenuTemplate = () => {
     </section>`
   );
 };
+
+export {createFilterMarkup, createSiteMenuTemplate};

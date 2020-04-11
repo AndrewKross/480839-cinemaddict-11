@@ -1,5 +1,5 @@
 const filmsDetailsData = [{
-  image: `../images/posters/Inception.jpg`,
+  image: `./images/posters/Inception.jpg`,
   age: 12,
   title: `Inception`,
   originalTitle: `Inception`,

@@ -14,23 +14,24 @@ const emojiList = [{
   alt: `emoji-angry`,
 }];
 
-const commentsText = [`Interesting setting and a good cast`, `Booooooooooring`, `Very very old. Meh`, `Almost two hours? Seriously?`];
+const commentsText = [`Interesting setting and a good cast`, `Booooooooooring`, `Very very old. Meh`, `Almost two hours? Seriously?`, `Loool`, `I love this movie!`, `Oscar to DiCaprio!`];
 
-const commentsAuthors = [`Tim Macoveev`, `John Doe`, `LeBron James`, `James Harden`, `Anthony Davis`];
+const commentsAuthors = [`Tim Duncan`, `John Wall`, `LeBron James`, `James Harden`, `Anthony Davis`, `Keks_The_Baller`];
+
+const commentData = (it) => {
+  it = {};
+  let randomizeEmoji = getRandomInt(0, emojiList.length);
+  it.emoji = emojiList[randomizeEmoji].emoji;
+  it.alt = emojiList[randomizeEmoji].alt;
+  it.text = commentsText[getRandomInt(0, commentsText.length)];
+  it.author = commentsAuthors[getRandomInt(0, commentsAuthors.length)];
+  let randomDate = getRandomDate(new Date(2012, 0, 1), new Date());
+  it.time = formatTime(randomDate);
+  return it;
+};
 
 const generateCommentsData = (count) => {
-  let generatedArray = new Array(count).fill({});
-  generatedArray.forEach((it) => {
-    let randomizeEmoji = getRandomInt(0, emojiList.length);
-    it.emoji = emojiList[randomizeEmoji].emoji;
-    it.alt = emojiList[randomizeEmoji].alt;
-    it.text = commentsText[getRandomInt(0, commentsText.length)];
-    it.author = commentsAuthors[getRandomInt(0, commentsAuthors.length)];
-    let randomDate = getRandomDate(new Date(2012, 0, 1), new Date());
-    it.time = formatTime(randomDate);
-  });
-
-  return generatedArray;
+  return new Array(count).fill(``).map(commentData);
 };
 
 export {generateCommentsData};

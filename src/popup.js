@@ -14,14 +14,15 @@ export const activatePopup = () => {
 
   const renderPopup = () => {
     const filmDetailsComponent = new FilmDetailsComponent(getFilmsDetailsData(`Inception`));
-    const filmDetailsSection = filmDetailsComponent.getElement().querySelector(`.film-details`);
+
+    render(body, filmDetailsComponent.getElement());
+    const filmDetailsSection = document.querySelector(`.film-details`);
     const closeButton = filmDetailsComponent.getElement().querySelector(`.film-details__close-btn`);
     const commentsCounter = filmDetailsComponent.getElement().querySelector(`.film-details__comments-count`);
     const commentsList = filmDetailsComponent.getElement().querySelector(`.film-details__comments-list`);
     const COMMENTS_COUNT = 4;
     const comments = generateCommentsData(COMMENTS_COUNT);
 
-    render(body, filmDetailsComponent.getElement());
 
     commentsCounter.textContent = comments.length;
 

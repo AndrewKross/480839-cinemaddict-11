@@ -1,5 +1,6 @@
-import {render} from "./main.js";
-import {createFilmDetailsTemplate, createCommentsTemplate} from "./components/film-details";
+import {render} from "./utils.js";
+import FilmDetailsComponent from "./components/film-details.js";
+import CommentComponent from "./components/comment.js";
 import {getFilmsDetailsData} from "./mock/film-details.js";
 import {generateCommentsData} from "./mock/comments.js";
 
@@ -12,20 +13,22 @@ export const activatePopup = () => {
   const ESC_KEY = `Escape`;
 
   const renderPopup = () => {
-    render(body, createFilmDetailsTemplate(getFilmsDetailsData(`Inception`))); // временно передедим выбранный фильм
+    const filmDetailsComponent = new FilmDetailsComponent(getFilmsDetailsData(`Inception`));
 
+    render(body, filmDetailsComponent.getElement());
     const filmDetailsSection = document.querySelector(`.film-details`);
-    const closeButton = filmDetailsSection.querySelector(`.film-details__close-btn`);
-    const commentsCounter = filmDetailsSection.querySelector(`.film-details__comments-count`);
-    const commentsList = filmDetailsSection.querySelector(`.film-details__comments-list`);
+    const closeButton = filmDetailsComponent.getElement().querySelector(`.film-details__close-btn`);
+    const commentsCounter = filmDetailsComponent.getElement().querySelector(`.film-details__comments-count`);
+    const commentsList = filmDetailsComponent.getElement().querySelector(`.film-details__comments-list`);
     const COMMENTS_COUNT = 4;
     const comments = generateCommentsData(COMMENTS_COUNT);
+
+
     commentsCounter.textContent = comments.length;
 
     comments.forEach((comment) => {
-      render(commentsList, createCommentsTemplate(comment));
+      render(commentsList, new CommentComponent(comment).getElement());
     });
-
 
     closeButton.onclick = () => {
       filmDetailsSection.remove();
@@ -37,7 +40,6 @@ export const activatePopup = () => {
       }
     };
   };
-
 
   [filmCardPoster, filmCardTitle, filmCardComments].forEach((items) => {
     items.forEach((it) => {

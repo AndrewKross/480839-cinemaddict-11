@@ -6,6 +6,7 @@ import MainNavigationComponent from "./components/main-navigation.js";
 import SortListComponent from "./components/sort-list.js";
 import FilmsSectionComponent from "./components/films-section.js";
 import FilterComponent from "./components/filter.js";
+import NoFilmsComponent from "./components/no-films.js";
 import {getFilmsData} from "./mock/films.js";
 import {activatePopup} from "./popup.js";
 import {generateFilters} from "./mock/filters.js";
@@ -41,11 +42,14 @@ const filmsListContainer = filmsList.querySelector(`.films-list__container`);
 
 let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
 
-filmsData.slice(0, showingFilmsCount).forEach((film) => {
-  render(filmsListContainer, new FilmCardComponent(film).getElement());
-});
-
-render(filmsList, new ShowMoreButtonComponent().getElement());
+if (filmsData.length === 0) {
+  render(filmsListContainer, new NoFilmsComponent().getElement());
+} else {
+  filmsData.slice(0, showingFilmsCount).forEach((film) => {
+    render(filmsListContainer, new FilmCardComponent(film).getElement());
+  });
+  render(filmsList, new ShowMoreButtonComponent().getElement());
+}
 
 
 EXTRA_FILMS_TITLES.forEach((it) => {

@@ -1,4 +1,4 @@
-import {getRandomInt} from "../utils.js";
+import {getRandomInt} from "../utils/common.js";
 
 const films = [{
   title: `Inception`,

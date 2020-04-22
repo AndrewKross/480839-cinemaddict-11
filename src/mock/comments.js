@@ -1,4 +1,4 @@
-import {getRandomInt, getRandomDate, formatTime} from "../utils.js";
+import {getRandomInt, getRandomDate, formatTime} from "../utils/common.js";
 
 const emojiList = [{
   emoji: `./images/emoji/smile.png`,

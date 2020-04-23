@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 
 const createNavigationTemplate = () => {
@@ -10,24 +10,8 @@ const createNavigationTemplate = () => {
   );
 };
 
-export default class Navigation {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Navigation extends AbstractComponent {
   getTemplate() {
     return createNavigationTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

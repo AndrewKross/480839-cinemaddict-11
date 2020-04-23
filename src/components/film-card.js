@@ -1,4 +1,5 @@
-import {getRandomInt, createElement} from "../utils.js";
+import {getRandomInt} from "../utils/common.js";
+import AbstractComponent from "./abstract-component.js";
 
 
 const createFilmCardTemplate = (filmData) => {
@@ -29,25 +30,23 @@ const createFilmCardTemplate = (filmData) => {
   );
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractComponent {
   constructor(filmData) {
+    super();
     this._filmData = filmData;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._filmData);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
+  setPopupClickHandler(cb) {
+    const filmCardPoster = this.getElement().querySelector(`.film-card__poster`);
+    const filmCardTitle = this.getElement().querySelector(`.film-card__title`);
+    const filmCardComments = this.getElement().querySelector(`.film-card__comments`);
 
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    [filmCardPoster, filmCardTitle, filmCardComments].forEach((it) => {
+      it.addEventListener(`click`, cb);
+    });
   }
 }

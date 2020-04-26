@@ -1,8 +1,12 @@
 import AbstractComponent from "./abstract-component.js";
 
 
-const createFilmDetailsTemplate = (filmDetailsData) => {
-  const {image, age, title, originalTitle, rating, director, writers, actors, release, duration, country, genres, description} = filmDetailsData;
+const createFilmDetailsTemplate = (filmData) => {
+  const {image, age, title, originalTitle, rating, director, writers, actors, release, duration, country, genres, description} = filmData;
+  const genresMarkup = genres.map((genre) => {
+    return `<span class="film-details__genre">${genre}</span>`;
+  }).join(`\n`);
+
   return (
     `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
@@ -57,9 +61,7 @@ const createFilmDetailsTemplate = (filmDetailsData) => {
                 <tr class="film-details__row">
                   <td class="film-details__term">Genres</td>
                   <td class="film-details__cell">
-                    <span class="film-details__genre">${genres[0]}</span>
-                    <span class="film-details__genre">${genres[1]}</span>
-                    <span class="film-details__genre">${genres[2]}</span></td>
+                  ${genresMarkup}</td>
                 </tr>
               </table>
     

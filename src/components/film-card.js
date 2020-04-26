@@ -3,8 +3,9 @@ import AbstractComponent from "./abstract-component.js";
 
 
 const createFilmCardTemplate = (filmData) => {
-  const {title, rating, year, duration, genre, image, description, inWatchlist, inHistory, inFavorites} = filmData;
+  const {title, rating, release, duration, genres, image, description, inWatchlist, inHistory, inFavorites} = filmData;
   const commentsCount = getRandomInt(0, 6); // от 0 до 5
+  const year = release.slice(-4);
   const commentOrCommentsWord = commentsCount === 1 ? `comment` : `comments`;
   const inWatchlistActiveClass = inWatchlist ? `film-card__controls-item--active` : ``;
   const inHistoryActiveClass = inHistory ? `film-card__controls-item--active` : ``;
@@ -16,7 +17,7 @@ const createFilmCardTemplate = (filmData) => {
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
         <span class="film-card__duration">${duration}</span>
-        <span class="film-card__genre">${genre}</span>
+        <span class="film-card__genre">${genres[0]}</span>
       </p>
       <img src="${image}" alt="" class="film-card__poster">
       <p class="film-card__description">${description}</p>

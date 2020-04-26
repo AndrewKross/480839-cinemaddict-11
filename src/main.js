@@ -2,7 +2,7 @@ import ProfileRatingComponent from "./components/profile-rating.js";
 import MainNavigationComponent from "./components/main-navigation.js";
 import SortListComponent from "./components/sort-list.js";
 import FilmsSectionComponent from "./components/films-section.js";
-import PageController from "./controllers/page-controller.js";
+import PageController from "./controllers/page.js";
 import FilterComponent from "./components/filter.js";
 import {getFilmsData} from "./mock/films.js";
 import {generateFilters} from "./mock/filters.js";

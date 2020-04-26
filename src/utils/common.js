@@ -4,6 +4,10 @@ export const getRandomInt = (min, max) => { // максимум не включ�
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
+export const getRandomArrayItems = (arr, count) => {
+  return new Array(count).fill(``).map(() => arr[getRandomInt(0, arr.length)]);
+};
+
 export const getRandomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };

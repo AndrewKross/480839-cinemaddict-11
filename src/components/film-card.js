@@ -4,7 +4,7 @@ import AbstractComponent from "./abstract-component.js";
 
 const createFilmCardTemplate = (filmData) => {
   const {title, rating, release, duration, genres, image, description, inWatchlist, inHistory, inFavorites} = filmData;
-  const commentsCount = getRandomInt(0, 6); // от 0 до 5
+  const commentsCount = getRandomInt(0, 6);
   const year = release.slice(-4);
   const commentOrCommentsWord = commentsCount === 1 ? `comment` : `comments`;
   const inWatchlistActiveClass = inWatchlist ? `film-card__controls-item--active` : ``;
@@ -49,5 +49,20 @@ export default class FilmCard extends AbstractComponent {
     [filmCardPoster, filmCardTitle, filmCardComments].forEach((it) => {
       it.addEventListener(`click`, cb);
     });
+  }
+
+  setWatchlistClickHandler(cb) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
+    .addEventListener(`click`, cb);
+  }
+
+  setWatchedClickHandler(cb) {
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`)
+    .addEventListener(`click`, cb);
+  }
+
+  setFavoriteClickHandler(cb) {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`)
+    .addEventListener(`click`, cb);
   }
 }

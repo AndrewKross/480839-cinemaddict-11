@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 
 
 const createFilmDetailsTemplate = (filmData) => {
@@ -127,7 +127,7 @@ const createFilmDetailsTemplate = (filmData) => {
   );
 };
 
-export default class FilmDetails extends AbstractComponent {
+export default class FilmDetails extends AbstractSmartComponent {
   constructor(filmDetailsData) {
     super();
     this._filmDetailsData = filmDetailsData;
@@ -137,8 +137,35 @@ export default class FilmDetails extends AbstractComponent {
     return createFilmDetailsTemplate(this._filmDetailsData);
   }
 
+  recoveryListeners() {
+
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
   setCloseButtonClickHandler(cb) {
     this.getElement().querySelector(`.film-details__close-btn`)
     .addEventListener(`click`, cb);
+    this.rerender();
+  }
+
+  setWatchlistClickHandler(cb) {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`)
+    .addEventListener(`click`, cb);
+    this.rerender();
+  }
+
+  setWatchedClickHandler(cb) {
+    this.getElement().querySelector(`.film-details__control-label--watched`)
+    .addEventListener(`click`, cb);
+    this.rerender();
+  }
+
+  setFavoriteClickHandler(cb) {
+    this.getElement().querySelector(`.film-details__control-label--favorite`)
+    .addEventListener(`click`, cb);
+    this.rerender();
   }
 }

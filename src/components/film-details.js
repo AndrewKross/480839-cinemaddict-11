@@ -1,8 +1,11 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import {render} from "../utils/render.js";
+import CommentComponent from "../components/comment.js";
 
 
-const createFilmDetailsTemplate = (filmData) => {
+const createFilmDetailsTemplate = (filmData, emoji) => {
   const {image, age, title, originalTitle, rating, director, writers, actors, release, duration, country, genres, description} = filmData;
+  const emojiMarkup = emoji ? `<img src="images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}"></img>` : ``;
   const genresMarkup = genres.map((genre) => {
     return `<span class="film-details__genre">${genre}</span>`;
   }).join(`\n`);
@@ -92,7 +95,7 @@ const createFilmDetailsTemplate = (filmData) => {
             </ul>
     
             <div class="film-details__new-comment">
-              <div for="add-emoji" class="film-details__add-emoji-label"></div>
+              <div for="add-emoji" class="film-details__add-emoji-label">${emojiMarkup}</div>
     
               <label class="film-details__comment-label">
                 <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -128,27 +131,52 @@ const createFilmDetailsTemplate = (filmData) => {
 };
 
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(filmDetailsData) {
+  constructor(filmData, comments) {
     super();
-    this._filmDetailsData = filmDetailsData;
+    this._filmData = filmData;
+    this._emoji = null;
+    this._closeButtonHandler = null;
+    this._comments = comments;
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._filmDetailsData);
+    return createFilmDetailsTemplate(this._filmData, this._emoji);
+  }
+
+  renderComments() {
+    const commentsList = this.getElement().querySelector(`.film-details__comments-list`);
+    this._comments.forEach((comment) => {
+      render(commentsList, new CommentComponent(comment));
+    });
   }
 
   recoveryListeners() {
-
+    this.setCloseButtonClickHandler(this._closeButtonHandler);
+    this.setEmojiChangeHandler();
+    this.renderComments();
   }
 
   rerender() {
     super.rerender();
   }
 
+  setEmoji(emoji) {
+    this._emoji = emoji;
+  }
+
+  setEmojiChangeHandler() {
+    this.getElement().querySelectorAll(`.film-details__emoji-item`).forEach((it) => {
+      it.addEventListener(`change`, (evt) => {
+        this.setEmoji(evt.target.value);
+        this.rerender();
+      });
+    });
+  }
+
   setCloseButtonClickHandler(cb) {
     this.getElement().querySelector(`.film-details__close-btn`)
     .addEventListener(`click`, cb);
-    this.rerender();
+    this._closeButtonHandler = cb;
   }
 
   setWatchlistClickHandler(cb) {

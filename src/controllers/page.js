@@ -10,9 +10,9 @@ const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 
 
-const renderFilms = (container, filmsData, onDataChange) => {
+const renderFilms = (container, filmsData, onDataChange, onViewChange) => {
   return filmsData.map((film) => {
-    const movieController = new MovieController(container, onDataChange);
+    const movieController = new MovieController(container, onDataChange, onViewChange);
     movieController.render(film);
     return movieController;
   });
@@ -27,6 +27,7 @@ export default class PageController {
     this._showMoreButtonComponent = new ShowMoreButtonComponent();
     this._showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
     this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
   }
 
   render(filmsData) {
@@ -40,7 +41,7 @@ export default class PageController {
       return;
     }
 
-    const newFilms = renderFilms(filmsContainerElement, filmsData.slice(0, this._showingFilmsCount), this._onDataChange);
+    const newFilms = renderFilms(filmsContainerElement, filmsData.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange);
     this._showedFilmsCards = this._showedFilmsCards.concat(newFilms);
 
     this._renderShowMoreButton(filmsData);
@@ -60,6 +61,10 @@ export default class PageController {
     this._showedFilmsCards[index].render(this._filmsData[index]);
   }
 
+  _onViewChange() {
+    this._showedFilmsCards.forEach((it) => it.setDefaultView());
+  }
+
   _renderShowMoreButton(filmsData) {
     const container = this._container.getElement();
     const filmsListElement = container.querySelector(`.films-list`);
@@ -68,7 +73,7 @@ export default class PageController {
       const prevFilmsCount = this._showingFilmsCount;
       this._showingFilmsCount += SHOWING_FILMS_COUNT_BY_BUTTON;
 
-      const newFilms = renderFilms(filmsContainerElement, filmsData.slice(prevFilmsCount, this._showingFilmsCount), this._onDataChange);
+      const newFilms = renderFilms(filmsContainerElement, filmsData.slice(prevFilmsCount, this._showingFilmsCount, this._onViewChange), this._onDataChange);
       this._showedFilmsCards = this._showedFilmsCards.concat(newFilms);
 
       if (this._showingFilmsCount >= filmsData.length) {

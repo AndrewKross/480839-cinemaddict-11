@@ -1,58 +1,5 @@
-import {getRandomInt} from "../utils/common.js";
-
-const films = [{
-  title: `Inception`,
-  rating: 8.8,
-  year: 2010,
-  duration: `2h 28min`,
-  genre: `Action`,
-  image: `./images/posters/Inception.jpg`,
-}, {
-  title: `Interstellar`,
-  rating: 8.6,
-  year: 2014,
-  duration: `2h 49min`,
-  genre: `Adventure`,
-  image: `./images/posters/Interstellar.jpg`,
-}, {
-  title: `John Wick`,
-  rating: 7.4,
-  year: 2014,
-  duration: `1h 41min`,
-  genre: `Action`,
-  image: `./images/posters/John-Wick.jpg`,
-}, {
-  title: `Men in Black`,
-  rating: 7.3,
-  year: 1997,
-  duration: `1h 38min`,
-  genre: `Action`,
-  image: `./images/posters/Men-in-Black.jpg`,
-}, {
-  title: `Skyfall`,
-  rating: 7.7,
-  year: 2012,
-  duration: `2h 23min`,
-  genre: `Action`,
-  image: `./images/posters/Skyfall.jpg`,
-}, {
-  title: `The Dark Knight`,
-  rating: 9.0,
-  year: 2008,
-  duration: `2h 32min`,
-  genre: `Action`,
-  image: `./images/posters/The-Dark-Knight.jpg`,
-}, {
-  title: `The Matrix`,
-  rating: 8.7,
-  year: 1999,
-  duration: `2h 16min`,
-  genre: `Action`,
-  image: `./images/posters/The-Matrix.jpg`,
-}
-];
-
-const description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
+import {getRandomInt, getRandomArrayItems} from "../utils/common.js";
+import {films, description, filmDirectors, filmWriters, filmActors, countryNames, ratingList} from "../const.js";
 
 let descriptionArray = description.slice(0, -1).split(`. `);
 
@@ -66,19 +13,22 @@ let getRandomDesc = () => {
   return generatedDesc;
 };
 
-const filmsData = films.map((it) => { // финальный массив объектов со всеми сгенерированными данными
-  it.description = getRandomDesc();
-  it.inWatchlist = Math.random() > 0.5;
-  it.inHistory = Math.random() > 0.5;
-  it.inFavorites = Math.random() > 0.5;
-  return it;
-});
-
 const getFilmsData = (count) => {
-  let generatedData = [];
-  for (let i = 0; i < count; i++) {
-    generatedData.push(filmsData[getRandomInt(0, filmsData.length)]);
-  }
+  let generatedData = new Array(count).fill(``).map(() => {
+    return Object.assign({}, films[getRandomInt(0, films.length)], {
+      age: ratingList[getRandomInt(0, ratingList.length)],
+      originalTitle: films[getRandomInt(0, films.length)].title,
+      director: filmDirectors[getRandomInt(0, filmDirectors.length)],
+      actors: getRandomArrayItems(filmActors, getRandomInt(1, 3)).join(`, `),
+      writers: getRandomArrayItems(filmWriters, getRandomInt(1, 3)).join(`, `),
+      country: countryNames[getRandomInt(0, countryNames.length)],
+      rating: getRandomInt(30, 100) / 10,
+      description: getRandomDesc(),
+      inWatchlist: Math.random() > 0.5,
+      inHistory: Math.random() > 0.5,
+      inFavorites: Math.random() > 0.5,
+    });
+  });
   return generatedData;
 };
 

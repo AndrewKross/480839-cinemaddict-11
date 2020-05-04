@@ -18,6 +18,12 @@ export const render = (container, component, place = RenderPosition.BEFOREEND) =
     case RenderPosition.BEFOREEND:
       container.append(component.getElement());
       break;
+    case RenderPosition.BEFORE:
+      container.before(component.getElement());
+      break;
+    case RenderPosition.AFTER:
+      container.after(component.getElement());
+      break;
   }
 };
 

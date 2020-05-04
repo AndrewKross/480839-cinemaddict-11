@@ -1,6 +1,4 @@
 import ProfileRatingComponent from "./components/profile-rating.js";
-import MainNavigationComponent from "./components/main-navigation.js";
-import SortListComponent from "./components/sort-list.js";
 import FilmsSectionComponent from "./components/films-section.js";
 import PageController from "./controllers/page.js";
 import FilterComponent from "./components/filter.js";
@@ -18,20 +16,19 @@ const filmsData = getFilmsData(FILMS_COUNT);
 const filters = generateFilters();
 
 render(siteHeaderElement, new ProfileRatingComponent());
-render(siteMainElement, new MainNavigationComponent());
-render(siteMainElement, new SortListComponent());
 
-const mainNavContainer = siteMainElement.querySelector(`.main-navigation__items`);
-
-filters.forEach((filter) => {
-  render(mainNavContainer, new FilterComponent(filter));
-});
 
 const filmsSectionComponent = new FilmsSectionComponent();
 render(siteMainElement, filmsSectionComponent);
 
 const pageController = new PageController(filmsSectionComponent);
 pageController.render(filmsData);
+
+const mainNavContainer = siteMainElement.querySelector(`.main-navigation__items`);
+
+filters.forEach((filter) => {
+  render(mainNavContainer, new FilterComponent(filter));
+});
 
 footerStats.innerHTML = `<p>${filmsData.length} movies inside</p>`;
 

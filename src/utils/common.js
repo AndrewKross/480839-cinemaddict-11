@@ -1,3 +1,8 @@
+import moment from "moment";
+import momentDurationFormatSetup from 'moment-duration-format';
+
+momentDurationFormatSetup(moment);
+
 export const getRandomInt = (min, max) => { // максимум не включается, минимум включается
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -12,14 +17,11 @@ export const getRandomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
-const castTimeFormat = (value) => {
-  return value < 10 ? `0${value}` : String(value);
+export const formatDuration = (duration) => {
+  return moment.duration(duration, `minutes`).format(`h[h] mm[m]`);
 };
 
-export const formatTime = (date) => {
-  const hours = castTimeFormat(date.getHours() % 12);
-  const minutes = castTimeFormat(date.getMinutes());
-
-  return `${hours}:${minutes}`;
+export const formatCommentDate = (date) => {
+  return moment(date).fromNow();
 };
 

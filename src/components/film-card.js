@@ -1,4 +1,4 @@
-import {getRandomInt} from "../utils/common.js";
+import {getRandomInt, formatDuration} from "../utils/common.js";
 import AbstractComponent from "./abstract-component.js";
 
 
@@ -16,7 +16,7 @@ const createFilmCardTemplate = (filmData) => {
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${formatDuration(duration)}</span>
         <span class="film-card__genre">${genres[0]}</span>
       </p>
       <img src="${image}" alt="" class="film-card__poster">

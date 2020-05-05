@@ -1,43 +1,29 @@
 const films = [{
   title: `Inception`,
-  release: `8 July 2010`,
-  duration: `2h 28min`,
   genres: [`Action`, `Adventure`, `Sci-Fi`],
   image: `./images/posters/Inception.jpg`,
 }, {
   title: `Interstellar`,
-  release: `1 June 2014`,
-  duration: `2h 49min`,
   genres: [`Adventure`, `Drama`, `Sci-Fi`],
   image: `./images/posters/Interstellar.jpg`,
 }, {
   title: `John Wick`,
-  release: `1 June 2014`,
-  duration: `1h 41min`,
   genres: [`Action`, `Crime`, `Thriller`],
   image: `./images/posters/John-Wick.jpg`,
 }, {
   title: `Men in Black`,
-  release: `1 June 1997`,
-  duration: `1h 38min`,
   genres: [`Action`, `Adventure`, `Comedy`],
   image: `./images/posters/Men-in-Black.jpg`,
 }, {
   title: `Skyfall`,
-  release: `1 June 2012`,
-  duration: `2h 23min`,
   genres: [`Action`, `Adventure`, `Thriller`],
   image: `./images/posters/Skyfall.jpg`,
 }, {
   title: `The Dark Knight`,
-  release: `1 June 2008`,
-  duration: `2h 32min`,
   genres: [`Action`, `Crime`, `Drama`],
   image: `./images/posters/The-Dark-Knight.jpg`,
 }, {
   title: `The Matrix`,
-  release: `1 June 1999`,
-  duration: `2h 16min`,
   genres: [`Action`, `Sci-Fi`],
   image: `./images/posters/The-Matrix.jpg`,
 }];

@@ -1,5 +1,6 @@
-import {getRandomInt, getRandomArrayItems} from "../utils/common.js";
+import {getRandomInt, getRandomArrayItems, getRandomDate} from "../utils/common.js";
 import {films, description, filmDirectors, filmWriters, filmActors, countryNames, ratingList} from "../const.js";
+import moment from "moment";
 
 let descriptionArray = description.slice(0, -1).split(`. `);
 
@@ -23,6 +24,8 @@ const getFilmsData = (count) => {
       writers: getRandomArrayItems(filmWriters, getRandomInt(1, 3)).join(`, `),
       country: countryNames[getRandomInt(0, countryNames.length)],
       rating: getRandomInt(30, 100) / 10,
+      release: moment(getRandomDate(new Date(1970), new Date())).format(`DD MMMM YYYY`),
+      duration: getRandomInt(30, 180),
       description: getRandomDesc(),
       inWatchlist: Math.random() > 0.5,
       inHistory: Math.random() > 0.5,

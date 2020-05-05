@@ -1,4 +1,4 @@
-import {getRandomInt, getRandomDate, formatTime} from "../utils/common.js";
+import {getRandomInt, getRandomDate} from "../utils/common.js";
 
 const emojiList = [{
   emoji: `./images/emoji/smile.png`,
@@ -25,8 +25,7 @@ const commentData = (it) => {
   it.alt = emojiList[randomizeEmoji].alt;
   it.text = commentsText[getRandomInt(0, commentsText.length)];
   it.author = commentsAuthors[getRandomInt(0, commentsAuthors.length)];
-  let randomDate = getRandomDate(new Date(2012, 0, 1), new Date());
-  it.time = formatTime(randomDate);
+  it.time = getRandomDate(new Date(2019, 0, 0), new Date());
   return it;
 };
 

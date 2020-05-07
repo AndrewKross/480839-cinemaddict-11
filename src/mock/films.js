@@ -17,6 +17,7 @@ let getRandomDesc = () => {
 const getFilmsData = (count) => {
   let generatedData = new Array(count).fill(``).map(() => {
     return Object.assign({}, films[getRandomInt(0, films.length)], {
+      id: String(new Date() + Math.random()),
       age: ratingList[getRandomInt(0, ratingList.length)],
       originalTitle: films[getRandomInt(0, films.length)].title,
       director: filmDirectors[getRandomInt(0, filmDirectors.length)],

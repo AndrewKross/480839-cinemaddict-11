@@ -13,7 +13,7 @@ const Mode = {
   OPENED: `opened`,
 };
 
-export default class MovieController {
+export default class FilmController {
   constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
@@ -27,19 +27,19 @@ export default class MovieController {
     this._filmCardComponent = new FilmCardComponent(filmData);
     this._filmCardComponent.setFavoriteClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(filmData, Object.assign({}, filmData, {
+      this._onDataChange(this, filmData, Object.assign({}, filmData, {
         inFavorites: !filmData.inFavorites
       }));
     });
     this._filmCardComponent.setWatchlistClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(filmData, Object.assign({}, filmData, {
+      this._onDataChange(this, filmData, Object.assign({}, filmData, {
         inWatchlist: !filmData.inWatchlist
       }));
     });
     this._filmCardComponent.setWatchedClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(filmData, Object.assign({}, filmData, {
+      this._onDataChange(this, filmData, Object.assign({}, filmData, {
         inHistory: !filmData.inHistory
       }));
     });

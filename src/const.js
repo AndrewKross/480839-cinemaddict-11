@@ -1,4 +1,4 @@
-const films = [{
+export const films = [{
   title: `Inception`,
   genres: [`Action`, `Adventure`, `Sci-Fi`],
   image: `./images/posters/Inception.jpg`,
@@ -28,17 +28,17 @@ const films = [{
   image: `./images/posters/The-Matrix.jpg`,
 }];
 
-const description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
+export const description = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
-const filmDirectors = [
+export const filmDirectors = [
   `Кристофер Нолан`, `Александр Роу`, `Люк Бессон`, `Роберт Земекис`, `Педро Альмодовар`, `Клинт Иствуд`, `Стивен Спилберг`, `Фрэнсис Форд Коппола`, `Дэвид Финчер`, `Серджио Леоне`, `Тим Бёртон`, `Квентин Тарантино`, `Гай Ричи`, `Питер Джексон`, `Джеймс Кэмерон`, `Альфред Хичкок`, `Кевин Смит`, `Ридли Скотт`
 ];
 
-const filmWriters = [
+export const filmWriters = [
   `Стивен Спилберг`, `Квентин Тарантино`, `Пол Сэведж`, `Мартин Скорсезе`, `Джеймс Кэмерон`, `Стивен Кинг`, `Оливер Стоун`, `Роберт Де Ниро`, `Роберт Таун`, `Альфред Хичкок`, `Ричард Линклейтер`, `Джоэл Коэн`, `Джордан Пил`, `Кевин Смит`, `Ридли Скотт`, `Даррен Аронофски`, `Бен Аффлек`, `Шейн Блэк`
 ];
 
-const filmActors = [
+export const filmActors = [
   `Галь Гадот`, `Брэд Питт`, `Леонардо Ди Каприо`, `Кэри Грант`, `Мэрилин Монро`, `Спенсер Трейси`, `Чарльз Чаплин`, `Барбара Стэнвик`, `Мэй Уэст`, `Камерон Диас`, `Кирк Дуглас`, `Софи Лорен`,
   `Сидни Пуатье`, `Уильям Холден`, `Род Стайгер`, `Том Круз`, `Николь Кидман`, `Уилл Смит`,
   `Джонни Депп`, `Дуэйн Джонсон`, `Том Хэнкс`, `Анджелина Джоли`, `Бен Аффлек`, `Крис Хемсворт`,
@@ -47,12 +47,28 @@ const filmActors = [
   `Натали Портман`, `Киану Ривз`, `Моника Беллуччи`
 ];
 
-const countryNames = [
+export const countryNames = [
   `Австралия`, `Австрия`, `	Бразилия`, `Великобритания`, `Вьетнам`, `Германия`, `Грузия`, `Египет`, `Индия`, `Испания`, `Италия`, `Канада`, `Корея`, `Нигерия`, `Россия`, `Казахстан`, `Китай`, `Япония`, `Турция`, `США`
 ];
 
-const ratingList = [
+export const ratingList = [
   `0`, `6`, `12`, `18`, `21`
 ];
 
-export {films, description, filmDirectors, filmWriters, filmActors, countryNames, ratingList};
+export const emojiList = [{
+  emoji: `./images/emoji/smile.png`,
+  alt: `emoji-smile`,
+}, {
+  emoji: `./images/emoji/sleeping.png`,
+  alt: `emoji-sleeping`,
+}, {
+  emoji: `./images/emoji/puke.png`,
+  alt: `emoji-puke`,
+}, {
+  emoji: `./images/emoji/angry.png`,
+  alt: `emoji-angry`,
+}];
+
+export const commentsText = [`Interesting setting and a good cast`, `Booooooooooring`, `Very very old. Meh`, `Almost two hours? Seriously?`, `Loool`, `I love this movie!`, `Oscar to DiCaprio!`];
+
+export const commentsAuthors = [`Tim Duncan`, `John Wall`, `LeBron James`, `James Harden`, `Anthony Davis`, `Keks_The_Baller`];

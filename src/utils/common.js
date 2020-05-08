@@ -1,7 +1,7 @@
 import moment from "moment";
 import momentDurationFormatSetup from 'moment-duration-format';
-
 momentDurationFormatSetup(moment);
+
 
 export const getRandomInt = (min, max) => { // максимум не включается, минимум включается
   min = Math.ceil(min);
@@ -24,4 +24,3 @@ export const formatDuration = (duration) => {
 export const formatCommentDate = (date) => {
   return moment(date).fromNow();
 };
-

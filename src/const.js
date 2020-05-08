@@ -72,3 +72,10 @@ export const emojiList = [{
 export const commentsText = [`Interesting setting and a good cast`, `Booooooooooring`, `Very very old. Meh`, `Almost two hours? Seriously?`, `Loool`, `I love this movie!`, `Oscar to DiCaprio!`];
 
 export const commentsAuthors = [`Tim Duncan`, `John Wall`, `LeBron James`, `James Harden`, `Anthony Davis`, `Keks_The_Baller`];
+
+export const FilterType = {
+  ALL: `All movies`,
+  WATCHLIST: `Watchlist`,
+  HISTORY: `History`,
+  FAVORITES: `Favorites`
+};

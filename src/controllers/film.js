@@ -89,6 +89,10 @@ export default class FilmController {
     };
   }
 
+  destroy() {
+    remove(this._filmCardComponent);
+  }
+
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
       remove(this._filmDetailsComponent);

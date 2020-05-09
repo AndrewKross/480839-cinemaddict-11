@@ -1,4 +1,5 @@
 import {getRandomInt, getRandomArrayItems, getRandomDate} from "../utils/common.js";
+import {generateCommentsData} from "../mock/comments";
 import {films, description, filmDirectors, filmWriters, filmActors, countryNames, ratingList} from "../const.js";
 import moment from "moment";
 
@@ -31,6 +32,7 @@ const getFilmsData = (count) => {
       inWatchlist: Math.random() > 0.5,
       inHistory: Math.random() > 0.5,
       inFavorites: Math.random() > 0.5,
+      comments: generateCommentsData(getRandomInt(0, 6)),
     });
   });
   return generatedData;

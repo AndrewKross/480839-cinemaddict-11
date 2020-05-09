@@ -3,6 +3,7 @@ import {FilterType} from "../const.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
 import {getFilmsByFilter} from "../utils/filter.js";
 
+
 export default class FilterController {
   constructor(container, filmsModel) {
     this._container = container;

@@ -131,12 +131,12 @@ const createFilmDetailsTemplate = (filmData, emoji) => {
 };
 
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(filmData, comments) {
+  constructor(filmData) {
     super();
     this._filmData = filmData;
     this._emoji = null;
     this._closeButtonHandler = null;
-    this._comments = comments;
+    this._comments = [];
   }
 
   getTemplate() {
@@ -145,9 +145,15 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   renderComments() {
     const commentsList = this.getElement().querySelector(`.film-details__comments-list`);
-    this._comments.forEach((comment) => {
-      render(commentsList, new CommentComponent(comment));
+    this._filmData.comments.forEach((comment) => {
+      const commentComponent = new CommentComponent(comment);
+      this._comments.push(commentComponent);
+      render(commentsList, commentComponent);
     });
+  }
+
+  getComments() {
+    return this._comments;
   }
 
   recoveryListeners() {

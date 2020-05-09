@@ -1,7 +1,5 @@
 import FilmDetailsComponent from "../components/film-details.js";
 import FilmCardComponent from "../components/film-card.js";
-import CommentComponent from "../components/comment.js";
-import {generateCommentsData} from "../mock/comments.js";
 import {render, remove, replace} from "../utils/render.js";
 
 
@@ -23,8 +21,8 @@ export default class FilmController {
 
   render(filmData) {
     const oldComponent = this._filmCardComponent;
-
     this._filmCardComponent = new FilmCardComponent(filmData);
+
     this._filmCardComponent.setFavoriteClickHandler((evt) => {
       evt.preventDefault();
       this._onDataChange(this, filmData, Object.assign({}, filmData, {
@@ -59,9 +57,7 @@ export default class FilmController {
   }
 
   setPopup(filmData) {
-    const COMMENTS_COUNT = 4;
-    const comments = generateCommentsData(COMMENTS_COUNT);
-    this._filmDetailsComponent = new FilmDetailsComponent(filmData, comments);
+    this._filmDetailsComponent = new FilmDetailsComponent(filmData);
 
     this._filmDetailsComponent.setCloseButtonClickHandler(() => {
       remove(this._filmDetailsComponent);
@@ -73,13 +69,10 @@ export default class FilmController {
     render(body, this._filmDetailsComponent);
 
     const commentsCounter = this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-count`);
-    const commentsList = this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-list`);
 
-    commentsCounter.textContent = comments.length;
+    commentsCounter.textContent = filmData.comments.length;
 
-    comments.forEach((comment) => {
-      render(commentsList, new CommentComponent(comment));
-    });
+    this._filmDetailsComponent.renderComments();
 
     document.onkeydown = (evt) => {
       if (evt.key === ESC_KEY) {
@@ -87,6 +80,19 @@ export default class FilmController {
         this._mode = Mode.DEFAULT;
       }
     };
+  }
+
+  _onCommentChange(oldData, newData) {
+    const isSuccess = this._commentModel.updateComment(oldData.id, newData);
+
+    if (newData === null) {
+      this._commentModel.removeComment(oldData.id);
+      this._updateTasks(this._showingTasksCount);
+    }
+
+    if (isSuccess) {
+      this._filmDetailsComponent.rerender();
+    }
   }
 
   destroy() {

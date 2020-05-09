@@ -1,12 +1,12 @@
-import {getRandomInt, formatDuration} from "../utils/common.js";
+import {formatDuration} from "../utils/common.js";
 import AbstractComponent from "./abstract-component.js";
 
 
 const createFilmCardTemplate = (filmData) => {
-  const {title, rating, release, duration, genres, image, description, inWatchlist, inHistory, inFavorites} = filmData;
-  const commentsCount = getRandomInt(0, 6);
+  const {title, rating, release, duration, genres, image, description, inWatchlist, inHistory, inFavorites, comments} = filmData;
+  const commentsCount = comments.length;
   const year = release.slice(-4);
-  const commentOrCommentsWord = commentsCount === 1 ? `comment` : `comments`;
+  const commentOrComments = commentsCount === 1 ? `comment` : `comments`;
   const inWatchlistActiveClass = inWatchlist ? `film-card__controls-item--active` : ``;
   const inHistoryActiveClass = inHistory ? `film-card__controls-item--active` : ``;
   const inFavoritesActiveClass = inFavorites ? `film-card__controls-item--active` : ``;
@@ -21,7 +21,7 @@ const createFilmCardTemplate = (filmData) => {
       </p>
       <img src="${image}" alt="" class="film-card__poster">
       <p class="film-card__description">${description}</p>
-      <a class="film-card__comments">${commentsCount} ${commentOrCommentsWord}</a>
+      <a class="film-card__comments">${commentsCount} ${commentOrComments}</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${inWatchlistActiveClass}">Add to watchlist</button>
         <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${inHistoryActiveClass}">Mark as watched</button>

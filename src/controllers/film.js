@@ -1,50 +1,52 @@
 import FilmDetailsComponent from "../components/film-details.js";
 import FilmCardComponent from "../components/film-card.js";
 import {render, remove, replace} from "../utils/render.js";
+import {ESC_KEY, Mode} from "../const.js";
 
 
-const ESC_KEY = `Escape`;
 const body = document.querySelector(`body`);
-
-const Mode = {
-  DEFAULT: `default`,
-  OPENED: `opened`,
-};
 
 export default class FilmController {
   constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+    this._filmData = {};
     this._mode = Mode.DEFAULT;
   }
 
   render(filmData) {
+    this._filmData = filmData;
     const oldComponent = this._filmCardComponent;
-    this._filmCardComponent = new FilmCardComponent(filmData);
+    this._filmCardComponent = new FilmCardComponent(this._filmData);
+
+    if (this._filmDetailsComponent) {
+      this._filmDetailsComponent.setNewFilmData(this._filmData);
+      this._filmDetailsComponent.rerender();
+    }
 
     this._filmCardComponent.setFavoriteClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, filmData, Object.assign({}, filmData, {
-        inFavorites: !filmData.inFavorites
+      this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
+        inFavorites: !this._filmData.inFavorites
       }));
     });
     this._filmCardComponent.setWatchlistClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, filmData, Object.assign({}, filmData, {
-        inWatchlist: !filmData.inWatchlist
+      this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
+        inWatchlist: !this._filmData.inWatchlist
       }));
     });
     this._filmCardComponent.setWatchedClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, filmData, Object.assign({}, filmData, {
-        inHistory: !filmData.inHistory
+      this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
+        inHistory: !this._filmData.inHistory
       }));
     });
 
     this._filmCardComponent.setPopupClickHandler(() => {
       this._onViewChange();
-      this.setPopup(filmData);
+      this.setPopup();
       this._mode = Mode.OPENED;
     });
 
@@ -56,12 +58,30 @@ export default class FilmController {
     render(this._container, this._filmCardComponent);
   }
 
-  setPopup(filmData) {
-    this._filmDetailsComponent = new FilmDetailsComponent(filmData);
+  setPopup() {
+    this._filmDetailsComponent = new FilmDetailsComponent(this._filmData);
 
     this._filmDetailsComponent.setCloseButtonClickHandler(() => {
       remove(this._filmDetailsComponent);
       this._mode = Mode.DEFAULT;
+    });
+
+    this._filmDetailsComponent.setFavoriteClickHandler(() => {
+      this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
+        inFavorites: !this._filmData.inFavorites
+      }));
+    });
+
+    this._filmDetailsComponent.setWatchedClickHandler(() => {
+      this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
+        inHistory: !this._filmData.inHistory
+      }));
+    });
+
+    this._filmDetailsComponent.setWatchlistClickHandler(() => {
+      this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
+        inWatchlist: !this._filmData.inWatchlist
+      }));
     });
 
     this._filmDetailsComponent.setEmojiChangeHandler();
@@ -70,7 +90,7 @@ export default class FilmController {
 
     const commentsCounter = this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-count`);
 
-    commentsCounter.textContent = filmData.comments.length;
+    commentsCounter.textContent = this._filmData.comments.length;
 
     this._filmDetailsComponent.renderComments();
 

@@ -3,6 +3,7 @@ import FilmsSectionComponent from "./components/films-section.js";
 import PageController from "./controllers/page.js";
 import FilterController from "./controllers/filter.js";
 import FilmsModel from "./models/films.js";
+import FooterStatsComponent from "./components/footer-stats.js";
 import {getFilmsData} from "./mock/films.js";
 import {render} from "./utils/render.js";
 
@@ -18,15 +19,14 @@ filmsModel.setFilms(filmsData);
 
 render(siteHeaderElement, new ProfileRatingComponent());
 
-
 const filmsSectionComponent = new FilmsSectionComponent();
 render(siteMainElement, filmsSectionComponent);
 
 const pageController = new PageController(filmsSectionComponent, filmsModel);
-pageController.render(filmsModel);
+pageController.render();
 
 const filterController = new FilterController(siteMainElement, filmsModel);
 filterController.render();
 
-footerStats.innerHTML = `<p>${filmsData.length} movies inside</p>`;
+render(footerStats, new FooterStatsComponent(filmsModel.getAllFilms()));
 

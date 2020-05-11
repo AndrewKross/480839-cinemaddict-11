@@ -4,11 +4,14 @@ import CommentComponent from "../components/comment.js";
 
 
 const createFilmDetailsTemplate = (filmData, emoji) => {
-  const {image, age, title, originalTitle, rating, director, writers, actors, release, duration, country, genres, description} = filmData;
+  const {image, age, title, originalTitle, rating, director, writers,
+    actors, release, duration, country, genres, description,
+    inWatchlist, inFavorites, inHistory} = filmData;
   const emojiMarkup = emoji ? `<img src="images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}"></img>` : ``;
   const genresMarkup = genres.map((genre) => {
     return `<span class="film-details__genre">${genre}</span>`;
   }).join(`\n`);
+  const isChecked = (prop) => prop ? `checked` : ``;
 
   return (
     `<section class="film-details">
@@ -75,13 +78,13 @@ const createFilmDetailsTemplate = (filmData, emoji) => {
           </div>
     
           <section class="film-details__controls">
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isChecked(inWatchlist)}>
             <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
     
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isChecked(inHistory)}>
             <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
     
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isChecked(inFavorites)}>
             <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
           </section>
         </div>
@@ -136,6 +139,9 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._filmData = filmData;
     this._emoji = null;
     this._closeButtonHandler = null;
+    this._inFavoritesClickHandler = null;
+    this._inWathlistClickHandler = null;
+    this._inHistoryClickHandler = null;
     this._comments = [];
   }
 
@@ -156,10 +162,17 @@ export default class FilmDetails extends AbstractSmartComponent {
     return this._comments;
   }
 
+  setNewFilmData(newFilmData) {
+    this._filmData = newFilmData;
+  }
+
   recoveryListeners() {
     this.setCloseButtonClickHandler(this._closeButtonHandler);
     this.setEmojiChangeHandler();
     this.renderComments();
+    this.setWatchlistClickHandler(this._watchlistClickHandler);
+    this.setWatchedClickHandler(this._watchedClickHandler);
+    this.setFavoriteClickHandler(this._favoriteClickHandler);
   }
 
   rerender() {
@@ -188,18 +201,18 @@ export default class FilmDetails extends AbstractSmartComponent {
   setWatchlistClickHandler(cb) {
     this.getElement().querySelector(`.film-details__control-label--watchlist`)
     .addEventListener(`click`, cb);
-    this.rerender();
+    this._watchlistClickHandler = cb;
   }
 
   setWatchedClickHandler(cb) {
     this.getElement().querySelector(`.film-details__control-label--watched`)
     .addEventListener(`click`, cb);
-    this.rerender();
+    this._watchedClickHandler = cb;
   }
 
   setFavoriteClickHandler(cb) {
     this.getElement().querySelector(`.film-details__control-label--favorite`)
     .addEventListener(`click`, cb);
-    this.rerender();
+    this._favoriteClickHandler = cb;
   }
 }

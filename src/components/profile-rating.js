@@ -9,7 +9,7 @@ const createProfileRatingTemplate = () => {
   );
 };
 
-export default class ProfileRatingComponent extends AbstractComponent {
+export default class ProfileRating extends AbstractComponent {
   getTemplate() {
     return createProfileRatingTemplate();
   }

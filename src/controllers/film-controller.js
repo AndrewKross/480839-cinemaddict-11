@@ -67,12 +67,7 @@ export default class FilmController {
   setPopup() {
     this._filmDetailsComponent = new FilmDetailsComponent(this._filmData, this._commentsData, this._onCommentChange);
 
-    this._filmDetailsComponent.setCloseButtonClickHandler(() => {
-      remove(this._filmDetailsComponent);
-      this._popupMode = PopupMode.DEFAULT;
-      this._commentsModel.setComments(this._filmData.comments);
-      this._commentsData = this._commentsModel.getComments();
-    });
+    this._filmDetailsComponent.setCloseButtonClickHandler(() => this._closePopup());
 
     this._filmDetailsComponent.setFavoriteClickHandler(() => {
       this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
@@ -100,10 +95,16 @@ export default class FilmController {
 
     document.onkeydown = (evt) => {
       if (evt.key === ESC_KEY) {
-        remove(this._filmDetailsComponent);
-        this._popupMode = PopupMode.DEFAULT;
+        this._closePopup();
       }
     };
+  }
+
+  _closePopup() {
+    remove(this._filmDetailsComponent);
+    this._popupMode = PopupMode.DEFAULT;
+    this._commentsModel.setComments(this._filmData.comments);
+    this._commentsData = this._commentsModel.getComments();
   }
 
   _onCommentChange(oldData, newData) {

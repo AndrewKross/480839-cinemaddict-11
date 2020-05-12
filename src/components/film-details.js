@@ -184,7 +184,7 @@ export default class FilmDetails extends AbstractSmartComponent {
   recoveryListeners() {
     this.setCloseButtonClickHandler(this._closeButtonHandler);
     this.setEmojiChangeHandler();
-    this.renderComments();
+    this.renderComments(this._commentsData);
     this.setWatchlistClickHandler(this._watchlistClickHandler);
     this.setWatchedClickHandler(this._watchedClickHandler);
     this.setFavoriteClickHandler(this._favoriteClickHandler);
@@ -203,6 +203,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       it.addEventListener(`change`, (evt) => {
         this.setEmoji(evt.target.value);
         this.rerender();
+        this.renderComments(this._commentsData);
       });
     });
   }

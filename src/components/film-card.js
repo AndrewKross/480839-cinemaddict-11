@@ -1,7 +1,6 @@
 import {formatDuration} from "../utils/common.js";
 import AbstractComponent from "./abstract-component.js";
 
-
 const createFilmCardTemplate = (filmData) => {
   const {title, rating, release, duration, genres, image, description, inWatchlist, inHistory, inFavorites, comments} = filmData;
   const commentsCount = comments.length;

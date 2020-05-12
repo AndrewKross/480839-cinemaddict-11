@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
 
-
 const createFilterMarkup = (filter) => {
   const {name, count, checked} = filter;
   const activeClass = `main-navigation__item--active`;
@@ -24,7 +23,7 @@ const createFilterTemplate = (filters) => {
   );
 };
 
-export default class Filter extends AbstractComponent {
+export default class FilterComponent extends AbstractComponent {
   constructor(filters) {
     super();
     this._filters = filters;

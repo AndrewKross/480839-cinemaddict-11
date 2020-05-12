@@ -10,7 +10,7 @@ export const FilterType = {
   FAVORITES: `Favorites`
 };
 
-export const Mode = {
+export const PopupMode = {
   DEFAULT: `default`,
   OPENED: `opened`,
 };

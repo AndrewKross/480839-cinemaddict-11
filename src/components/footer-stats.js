@@ -6,8 +6,7 @@ const createFooterStatsTemplate = (filmsData) => {
   );
 };
 
-
-export default class FooterStats extends AbstractComponent {
+export default class FooterStatsComponent extends AbstractComponent {
   constructor(filmsData) {
     super();
     this._filmsData = filmsData;

@@ -2,7 +2,6 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import {render} from "../utils/render.js";
 import CommentComponent from "../components/comment.js";
 
-
 const createFilmDetailsTemplate = (filmData, emoji) => {
   const {image, age, title, originalTitle, rating, director, writers,
     actors, release, duration, country, genres, description,
@@ -91,7 +90,7 @@ const createFilmDetailsTemplate = (filmData, emoji) => {
     
         <div class="form-details__bottom-container">
           <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">3</span></h3>
+            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${filmData.comments.length}</span></h3>
     
             <ul class="film-details__comments-list">
               
@@ -139,9 +138,9 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._filmData = filmData;
     this._emoji = null;
     this._closeButtonHandler = null;
-    this._inFavoritesClickHandler = null;
-    this._inWathlistClickHandler = null;
-    this._inHistoryClickHandler = null;
+    this._favoriteClickHandler = null;
+    this._watchlistClickHandler = null;
+    this._watchedClickHandler = null;
     this._comments = [];
   }
 

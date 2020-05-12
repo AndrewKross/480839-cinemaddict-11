@@ -1,6 +1,5 @@
 import {FilterType} from "../const.js";
 
-
 export const getFilmsInWatchlist = (films) => {
   return films.filter((film) => film.inWatchlist);
 };

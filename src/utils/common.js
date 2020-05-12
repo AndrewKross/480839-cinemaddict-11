@@ -2,7 +2,6 @@ import moment from "moment";
 import momentDurationFormatSetup from 'moment-duration-format';
 momentDurationFormatSetup(moment);
 
-
 export const getRandomInt = (min, max) => { // максимум не включается, минимум включается
   min = Math.ceil(min);
   max = Math.floor(max);

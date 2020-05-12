@@ -1,8 +1,7 @@
 import FilmDetailsComponent from "../components/film-details.js";
 import FilmCardComponent from "../components/film-card.js";
 import {render, remove, replace} from "../utils/render.js";
-import {ESC_KEY, Mode} from "../const.js";
-
+import {ESC_KEY, PopupMode} from "../const.js";
 
 const body = document.querySelector(`body`);
 
@@ -12,7 +11,7 @@ export default class FilmController {
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._filmData = {};
-    this._mode = Mode.DEFAULT;
+    this._popupMode = PopupMode.DEFAULT;
   }
 
   render(filmData) {
@@ -47,7 +46,7 @@ export default class FilmController {
     this._filmCardComponent.setPopupClickHandler(() => {
       this._onViewChange();
       this.setPopup();
-      this._mode = Mode.OPENED;
+      this._popupMode = PopupMode.OPENED;
     });
 
     if (oldComponent) {
@@ -63,7 +62,7 @@ export default class FilmController {
 
     this._filmDetailsComponent.setCloseButtonClickHandler(() => {
       remove(this._filmDetailsComponent);
-      this._mode = Mode.DEFAULT;
+      this._popupMode = PopupMode.DEFAULT;
     });
 
     this._filmDetailsComponent.setFavoriteClickHandler(() => {
@@ -88,16 +87,12 @@ export default class FilmController {
 
     render(body, this._filmDetailsComponent);
 
-    const commentsCounter = this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-count`);
-
-    commentsCounter.textContent = this._filmData.comments.length;
-
     this._filmDetailsComponent.renderComments();
 
     document.onkeydown = (evt) => {
       if (evt.key === ESC_KEY) {
         remove(this._filmDetailsComponent);
-        this._mode = Mode.DEFAULT;
+        this._popupMode = PopupMode.DEFAULT;
       }
     };
   }
@@ -120,9 +115,9 @@ export default class FilmController {
   }
 
   setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
+    if (this._popupMode !== PopupMode.DEFAULT) {
       remove(this._filmDetailsComponent);
-      this._mode = Mode.DEFAULT;
+      this._popupMode = PopupMode.DEFAULT;
     }
   }
 }

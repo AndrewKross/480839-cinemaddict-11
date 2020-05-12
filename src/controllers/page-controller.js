@@ -1,11 +1,10 @@
 import FilmsExtraComponent from "../components/films-extra.js";
 import ShowMoreButtonComponent from "../components/show-more-button.js";
 import NoFilmsComponent from "../components/no-films.js";
-import FilmController from "../controllers/film.js";
+import FilmController from "./film-controller.js";
 import SortListComponent, {SortType} from "../components/sort.js";
 import {render, remove, RenderPosition} from "../utils/render.js";
 import {EXTRA_FILMS_COUNT, SHOWING_FILMS_COUNT_BY_BUTTON, SHOWING_FILMS_COUNT_ON_START} from "../const.js";
-
 
 const renderFilms = (container, filmsData, onDataChange, onViewChange) => {
   return filmsData.map((film) => {
@@ -59,7 +58,7 @@ export default class PageController {
     const filmsContainerElement = container.querySelector(`.films-list__container`);
     const filmsData = this._filmsModel.getFilms();
 
-    render(container.parentElement, this._sortListComponent, RenderPosition.AFTERBEGIN);
+    render(container, this._sortListComponent, RenderPosition.BEFORE);
 
     if (filmsData.length === 0) {
       render(filmsContainerElement, this._noFilmsComponent);

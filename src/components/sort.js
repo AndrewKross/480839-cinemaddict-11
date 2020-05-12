@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
 
-
 export const SortType = {
   RATING: `rating`,
   DATE: `date`,
@@ -17,7 +16,7 @@ const createSortTemplate = () => {
   );
 };
 
-export default class Sort extends AbstractComponent {
+export default class SortComponent extends AbstractComponent {
   constructor() {
     super();
 

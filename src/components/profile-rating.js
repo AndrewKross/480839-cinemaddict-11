@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
 
-
 const createProfileRatingTemplate = () => {
   return (
     `<section class="header__profile profile">
@@ -10,7 +9,7 @@ const createProfileRatingTemplate = () => {
   );
 };
 
-export default class ProfileRating extends AbstractComponent {
+export default class ProfileRatingComponent extends AbstractComponent {
   getTemplate() {
     return createProfileRatingTemplate();
   }

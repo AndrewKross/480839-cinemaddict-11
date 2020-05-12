@@ -1,8 +1,8 @@
 import {formatDuration} from "../utils/common.js";
 import AbstractComponent from "./abstract-component.js";
 
-const createFilmCardTemplate = (filmData) => {
-  const {title, rating, release, duration, genres, image, description, inWatchlist, inHistory, inFavorites, comments} = filmData;
+const createFilmCardTemplate = (filmData, comments) => {
+  const {title, rating, release, duration, genres, image, description, inWatchlist, inHistory, inFavorites} = filmData;
   const commentsCount = comments.length;
   const year = release.slice(-4);
   const commentOrComments = commentsCount === 1 ? `comment` : `comments`;
@@ -31,13 +31,14 @@ const createFilmCardTemplate = (filmData) => {
 };
 
 export default class FilmCard extends AbstractComponent {
-  constructor(filmData) {
+  constructor(filmData, commentsData) {
     super();
     this._filmData = filmData;
+    this._commentsData = commentsData;
   }
 
   getTemplate() {
-    return createFilmCardTemplate(this._filmData);
+    return createFilmCardTemplate(this._filmData, this._commentsData);
   }
 
   setPopupClickHandler(cb) {

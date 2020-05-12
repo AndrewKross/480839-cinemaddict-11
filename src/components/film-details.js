@@ -1,5 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {render} from "../utils/render.js";
+import {render, remove} from "../utils/render.js";
 import CommentComponent from "../components/comment.js";
 
 const createFilmDetailsTemplate = (filmData, emoji) => {
@@ -133,32 +133,48 @@ const createFilmDetailsTemplate = (filmData, emoji) => {
 };
 
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(filmData) {
+  constructor(filmData, commentsData, onCommentChange) {
     super();
     this._filmData = filmData;
+    this._commentsData = commentsData;
+    this._onCommentChange = onCommentChange;
+    this._showedCommentsComponents = [];
     this._emoji = null;
     this._closeButtonHandler = null;
     this._favoriteClickHandler = null;
     this._watchlistClickHandler = null;
     this._watchedClickHandler = null;
-    this._comments = [];
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._filmData, this._emoji);
   }
 
-  renderComments() {
-    const commentsList = this.getElement().querySelector(`.film-details__comments-list`);
-    this._filmData.comments.forEach((comment) => {
+  renderComments(newCommentsData) {
+    this._commentsData = newCommentsData;
+    this._removeAllComments();
+    this._commentsData.forEach((comment) => {
       const commentComponent = new CommentComponent(comment);
-      this._comments.push(commentComponent);
-      render(commentsList, commentComponent);
+      this._showedCommentsComponents.push(commentComponent);
+      commentComponent.setDeleteCommentHandler((evt) => {
+        evt.preventDefault();
+        this._onCommentChange(comment, null);
+      });
+      render(this._getCommentsListElement(), commentComponent);
     });
   }
 
   getComments() {
-    return this._comments;
+    return this._commentsData;
+  }
+
+  _removeAllComments() {
+    this._showedCommentsComponents.forEach((component) => remove(component));
+    this._showedCommentsComponents = [];
+  }
+
+  _getCommentsListElement() {
+    return this.getElement().querySelector(`.film-details__comments-list`);
   }
 
   setNewFilmData(newFilmData) {

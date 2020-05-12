@@ -1,5 +1,6 @@
 import FilmDetailsComponent from "../components/film-details.js";
 import FilmCardComponent from "../components/film-card.js";
+import CommentsModel from "../models/comments-model";
 import {render, remove, replace} from "../utils/render.js";
 import {ESC_KEY, PopupMode} from "../const.js";
 
@@ -11,13 +12,19 @@ export default class FilmController {
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._filmData = {};
+    this._commentsData = [];
     this._popupMode = PopupMode.DEFAULT;
+
+    this._onCommentChange = this._onCommentChange.bind(this);
   }
 
   render(filmData) {
     this._filmData = filmData;
+    this._commentsModel = new CommentsModel();
+    this._commentsModel.setComments(this._filmData.comments);
+    this._commentsData = this._commentsModel.getComments();
     const oldComponent = this._filmCardComponent;
-    this._filmCardComponent = new FilmCardComponent(this._filmData);
+    this._filmCardComponent = new FilmCardComponent(this._filmData, this._commentsData);
 
     if (this._filmDetailsComponent) {
       this._filmDetailsComponent.setNewFilmData(this._filmData);
@@ -58,11 +65,13 @@ export default class FilmController {
   }
 
   setPopup() {
-    this._filmDetailsComponent = new FilmDetailsComponent(this._filmData);
+    this._filmDetailsComponent = new FilmDetailsComponent(this._filmData, this._commentsData, this._onCommentChange);
 
     this._filmDetailsComponent.setCloseButtonClickHandler(() => {
       remove(this._filmDetailsComponent);
       this._popupMode = PopupMode.DEFAULT;
+      this._commentsModel.setComments(this._filmData.comments);
+      this._commentsData = this._commentsModel.getComments();
     });
 
     this._filmDetailsComponent.setFavoriteClickHandler(() => {
@@ -87,7 +96,7 @@ export default class FilmController {
 
     render(body, this._filmDetailsComponent);
 
-    this._filmDetailsComponent.renderComments();
+    this._filmDetailsComponent.renderComments(this._commentsData);
 
     document.onkeydown = (evt) => {
       if (evt.key === ESC_KEY) {
@@ -98,16 +107,13 @@ export default class FilmController {
   }
 
   _onCommentChange(oldData, newData) {
-    const isSuccess = this._commentModel.updateComment(oldData.id, newData);
-
     if (newData === null) {
-      this._commentModel.removeComment(oldData.id);
-      this._updateTasks(this._showingTasksCount);
+      this._commentsModel.removeComment(oldData.id);
+    } else {
+      this._commentsModel.updateComments(oldData.id, newData);
     }
-
-    if (isSuccess) {
-      this._filmDetailsComponent.rerender();
-    }
+    this._commentsData = this._commentsModel.getComments();
+    this._filmDetailsComponent.renderComments(this._commentsData);
   }
 
   destroy() {

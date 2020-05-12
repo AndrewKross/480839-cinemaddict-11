@@ -203,7 +203,6 @@ export default class FilmDetails extends AbstractSmartComponent {
       it.addEventListener(`change`, (evt) => {
         this.setEmoji(evt.target.value);
         this.rerender();
-        this.renderComments(this._commentsData);
       });
     });
   }

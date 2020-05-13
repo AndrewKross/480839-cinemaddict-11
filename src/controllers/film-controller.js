@@ -16,6 +16,7 @@ export default class FilmController {
     this._popupMode = PopupMode.DEFAULT;
 
     this._onCommentChange = this._onCommentChange.bind(this);
+    this._closePopupOnEscPress = this._closePopupOnEscPress.bind(this);
   }
 
   render(filmData) {
@@ -93,11 +94,13 @@ export default class FilmController {
 
     this._filmDetailsComponent.renderComments(this._commentsData);
 
-    document.onkeydown = (evt) => {
-      if (evt.key === ESC_KEY) {
-        this._closePopup();
-      }
-    };
+    document.addEventListener(`keydown`, this._closePopupOnEscPress);
+  }
+
+  _closePopupOnEscPress(evt) {
+    if (evt.key === ESC_KEY) {
+      this._closePopup();
+    }
   }
 
   _closePopup() {
@@ -105,16 +108,21 @@ export default class FilmController {
     this._popupMode = PopupMode.DEFAULT;
     this._commentsModel.setComments(this._filmData.comments);
     this._commentsData = this._commentsModel.getComments();
+    document.removeEventListener(`keydown`, this._closePopupOnEscPress);
   }
 
   _onCommentChange(oldData, newData) {
+    let isSuccess = false;
     if (newData === null) {
-      this._commentsModel.removeComment(oldData.id);
+      isSuccess = this._commentsModel.removeComment(oldData.id);
     } else {
-      this._commentsModel.updateComments(oldData.id, newData);
+      isSuccess = this._commentsModel.updateComments(oldData.id, newData);
     }
-    this._commentsData = this._commentsModel.getComments();
-    this._filmDetailsComponent.renderComments(this._commentsData);
+
+    if (isSuccess) {
+      this._commentsData = this._commentsModel.getComments();
+      this._filmDetailsComponent.renderComments(this._commentsData);
+    }
   }
 
   destroy() {

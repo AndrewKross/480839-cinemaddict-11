@@ -1,6 +1,7 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {render, remove} from "../utils/render.js";
 import CommentComponent from "../components/comment.js";
+import {Keycodes} from "../const.js";
 
 const createFilmDetailsTemplate = (filmData, emoji) => {
   const {image, age, title, originalTitle, rating, director, writers,
@@ -182,8 +183,31 @@ export default class FilmDetails extends AbstractSmartComponent {
     return this.getElement().querySelector(`.film-details__comments-list`);
   }
 
+  _getCommentInputElement() {
+    return this.getElement().querySelector(`.film-details__comment-input`);
+  }
+
   setNewFilmData(newFilmData) {
     this._filmData = newFilmData;
+  }
+
+  setNewCommentHandler() {
+    const commentInput = this._getCommentInputElement();
+    commentInput.addEventListener(`input`, () => {
+      this._newCommentTextValue = commentInput.value;
+    });
+    commentInput.addEventListener(`keydown`, (evt) => {
+      if (evt.ctrlKey && evt.key === Keycodes.ENTER_KEY) {
+        this._onCommentChange(null, {
+          comment: commentInput.value,
+          date: new Date(),
+          emotion: this._emoji,
+          author: `Неавторизованный киноман`,
+        });
+        commentInput.value = ``;
+        this._newCommentTextValue = ``;
+      }
+    });
   }
 
   recoveryListeners() {
@@ -192,11 +216,13 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.setWatchlistClickHandler(this._watchlistClickHandler);
     this.setWatchedClickHandler(this._watchedClickHandler);
     this.setFavoriteClickHandler(this._favoriteClickHandler);
+    this.setNewCommentHandler();
   }
 
   rerender() {
     super.rerender();
     this.renderComments(this._commentsData);
+    this._getCommentInputElement().value = this._newCommentTextValue;
   }
 
   setEmoji(emoji) {

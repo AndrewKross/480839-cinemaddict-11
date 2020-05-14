@@ -28,15 +28,8 @@ export default class CommentsModel {
     return true;
   }
 
-  updateComments(id, comment) {
-    const index = this._comments.findIndex((it) => it.id === id);
-
-    if (index === -1) {
-      return false;
-    }
-
-    this._comments = [].concat(this._comments.slice(0, index), comment, this._comments.slice(index + 1));
-
+  addComment(comment) {
+    this._comments = [].concat(this._comments, comment);
     this._callHandlers(this._dataChangeHandlers);
 
     return true;

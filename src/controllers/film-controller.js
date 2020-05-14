@@ -2,7 +2,7 @@ import FilmDetailsComponent from "../components/film-details.js";
 import FilmCardComponent from "../components/film-card.js";
 import CommentsModel from "../models/comments-model";
 import {render, remove, replace} from "../utils/render.js";
-import {ESC_KEY, PopupMode} from "../const.js";
+import {Keycodes, PopupMode} from "../const.js";
 
 const body = document.querySelector(`body`);
 
@@ -69,6 +69,7 @@ export default class FilmController {
     this._filmDetailsComponent = new FilmDetailsComponent(this._filmData, this._commentsData, this._onCommentChange);
 
     this._filmDetailsComponent.setCloseButtonClickHandler(() => this._closePopup());
+    this._filmDetailsComponent.setNewCommentHandler();
 
     this._filmDetailsComponent.setFavoriteClickHandler(() => {
       this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
@@ -98,7 +99,7 @@ export default class FilmController {
   }
 
   _closePopupOnEscPress(evt) {
-    if (evt.key === ESC_KEY) {
+    if (evt.key === Keycodes.ESC_KEY) {
       this._closePopup();
     }
   }
@@ -116,7 +117,7 @@ export default class FilmController {
     if (newData === null) {
       isSuccess = this._commentsModel.removeComment(oldData.id);
     } else {
-      isSuccess = this._commentsModel.updateComments(oldData.id, newData);
+      isSuccess = this._commentsModel.addComment(newData);
     }
 
     if (isSuccess) {

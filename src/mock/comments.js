@@ -1,17 +1,13 @@
 import {getRandomInt, getRandomDate} from "../utils/common.js";
 
 const emojiList = [{
-  emoji: `./images/emoji/smile.png`,
-  alt: `emoji-smile`,
+  emotion: `smile`,
 }, {
-  emoji: `./images/emoji/sleeping.png`,
-  alt: `emoji-sleeping`,
+  emotion: `sleeping`,
 }, {
-  emoji: `./images/emoji/puke.png`,
-  alt: `emoji-puke`,
+  emotion: `puke`,
 }, {
-  emoji: `./images/emoji/angry.png`,
-  alt: `emoji-angry`,
+  emotion: `angry`,
 }];
 
 const commentsText = [`Interesting setting and a good cast`, `Booooooooooring`, `Very very old. Meh`, `Almost two hours? Seriously?`, `Loool`, `I love this movie!`, `Oscar to DiCaprio!`];
@@ -23,9 +19,9 @@ const commentData = (it) => {
   let randomizeEmoji = getRandomInt(0, emojiList.length);
 
   it.id = String(new Date() + Math.random());
-  it.emoji = emojiList[randomizeEmoji].emoji;
+  it.emotion = emojiList[randomizeEmoji].emotion;
   it.alt = emojiList[randomizeEmoji].alt;
-  it.text = commentsText[getRandomInt(0, commentsText.length)];
+  it.comment = commentsText[getRandomInt(0, commentsText.length)];
   it.author = commentsAuthors[getRandomInt(0, commentsAuthors.length)];
   it.time = getRandomDate(new Date(2019, 0, 0), new Date());
 

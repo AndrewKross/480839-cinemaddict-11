@@ -6,7 +6,6 @@ const createNoFilmsTemplate = () => {
   );
 };
 
-
 export default class NoFilms extends AbstractComponent {
   getTemplate() {
     return createNoFilmsTemplate();

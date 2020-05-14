@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
 
-
 const createFilmsSectionTemplate = () => {
   return (
     `<section class="films">

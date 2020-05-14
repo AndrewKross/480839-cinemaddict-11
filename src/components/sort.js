@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
 
-
 export const SortType = {
   RATING: `rating`,
   DATE: `date`,
@@ -47,8 +46,14 @@ export default class Sort extends AbstractComponent {
       }
 
       this._currentSortType = sortType;
-
+      this._removeActiveClass();
+      evt.target.classList.add(`sort__button--active`);
       handler(this._currentSortType);
     });
+  }
+
+  _removeActiveClass() {
+    this.getElement().querySelectorAll(`a`)
+    .forEach((it) => it.classList.remove(`sort__button--active`));
   }
 }

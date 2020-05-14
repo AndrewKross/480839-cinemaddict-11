@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
 
-
 const createFilmsExtraTemplate = (title) => {
   return (
     `<section class="films-list--extra">

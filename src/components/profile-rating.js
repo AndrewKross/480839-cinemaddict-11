@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
 
-
 const createProfileRatingTemplate = () => {
   return (
     `<section class="header__profile profile">

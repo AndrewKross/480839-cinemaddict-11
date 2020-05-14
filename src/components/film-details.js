@@ -1,14 +1,18 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {render} from "../utils/render.js";
+import {render, remove} from "../utils/render.js";
 import CommentComponent from "../components/comment.js";
-
+import {Keycodes} from "../const.js";
+import {encode} from "he";
 
 const createFilmDetailsTemplate = (filmData, emoji) => {
-  const {image, age, title, originalTitle, rating, director, writers, actors, release, duration, country, genres, description} = filmData;
+  const {image, age, title, originalTitle, rating, director, writers,
+    actors, release, duration, country, genres, description,
+    inWatchlist, inFavorites, inHistory} = filmData;
   const emojiMarkup = emoji ? `<img src="images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}"></img>` : ``;
   const genresMarkup = genres.map((genre) => {
     return `<span class="film-details__genre">${genre}</span>`;
   }).join(`\n`);
+  const isChecked = (prop) => prop ? `checked` : ``;
 
   return (
     `<section class="film-details">
@@ -75,20 +79,20 @@ const createFilmDetailsTemplate = (filmData, emoji) => {
           </div>
     
           <section class="film-details__controls">
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isChecked(inWatchlist)}>
             <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
     
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isChecked(inHistory)}>
             <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
     
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isChecked(inFavorites)}>
             <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
           </section>
         </div>
     
         <div class="form-details__bottom-container">
           <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">3</span></h3>
+            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${filmData.comments.length}</span></h3>
     
             <ul class="film-details__comments-list">
               
@@ -131,33 +135,95 @@ const createFilmDetailsTemplate = (filmData, emoji) => {
 };
 
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(filmData, comments) {
+  constructor(filmData, commentsData, onCommentChange) {
     super();
     this._filmData = filmData;
+    this._commentsData = commentsData;
+    this._onCommentChange = onCommentChange;
+    this._showedCommentsComponents = [];
     this._emoji = null;
     this._closeButtonHandler = null;
-    this._comments = comments;
+    this._favoriteClickHandler = null;
+    this._watchlistClickHandler = null;
+    this._watchedClickHandler = null;
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._filmData, this._emoji);
   }
 
-  renderComments() {
-    const commentsList = this.getElement().querySelector(`.film-details__comments-list`);
-    this._comments.forEach((comment) => {
-      render(commentsList, new CommentComponent(comment));
+  renderComments(newCommentsData) {
+    this._commentsData = newCommentsData;
+    this._removeAllComments();
+    this._setCommentsCount(this._commentsData);
+    this._commentsData.forEach((comment) => {
+      const commentComponent = new CommentComponent(comment);
+      this._showedCommentsComponents.push(commentComponent);
+      commentComponent.setDeleteCommentHandler((evt) => {
+        evt.preventDefault();
+        this._onCommentChange(comment, null);
+      });
+      render(this._getCommentsListElement(), commentComponent);
+    });
+  }
+
+  _setCommentsCount(value) {
+    this.getElement().querySelector(`.film-details__comments-count`).textContent = value.length;
+  }
+
+  getComments() {
+    return this._commentsData;
+  }
+
+  _removeAllComments() {
+    this._showedCommentsComponents.forEach((component) => remove(component));
+    this._showedCommentsComponents = [];
+  }
+
+  _getCommentsListElement() {
+    return this.getElement().querySelector(`.film-details__comments-list`);
+  }
+
+  _getCommentInputElement() {
+    return this.getElement().querySelector(`.film-details__comment-input`);
+  }
+
+  setNewFilmData(newFilmData) {
+    this._filmData = newFilmData;
+  }
+
+  setNewCommentHandler() {
+    const commentInput = this._getCommentInputElement();
+    commentInput.addEventListener(`input`, () => {
+      this._newCommentTextValue = encode(commentInput.value);
+    });
+    commentInput.addEventListener(`keydown`, (evt) => {
+      if (evt.ctrlKey && evt.key === Keycodes.ENTER_KEY) {
+        this._onCommentChange(null, {
+          comment: encode(commentInput.value),
+          date: new Date(),
+          emotion: this._emoji,
+          author: `Неавторизованный киноман`,
+        });
+        commentInput.value = ``;
+        this._newCommentTextValue = ``;
+      }
     });
   }
 
   recoveryListeners() {
     this.setCloseButtonClickHandler(this._closeButtonHandler);
     this.setEmojiChangeHandler();
-    this.renderComments();
+    this.setWatchlistClickHandler(this._watchlistClickHandler);
+    this.setWatchedClickHandler(this._watchedClickHandler);
+    this.setFavoriteClickHandler(this._favoriteClickHandler);
+    this.setNewCommentHandler();
   }
 
   rerender() {
     super.rerender();
+    this.renderComments(this._commentsData);
+    this._getCommentInputElement().value = this._newCommentTextValue;
   }
 
   setEmoji(emoji) {
@@ -182,18 +248,18 @@ export default class FilmDetails extends AbstractSmartComponent {
   setWatchlistClickHandler(cb) {
     this.getElement().querySelector(`.film-details__control-label--watchlist`)
     .addEventListener(`click`, cb);
-    this.rerender();
+    this._watchlistClickHandler = cb;
   }
 
   setWatchedClickHandler(cb) {
     this.getElement().querySelector(`.film-details__control-label--watched`)
     .addEventListener(`click`, cb);
-    this.rerender();
+    this._watchedClickHandler = cb;
   }
 
   setFavoriteClickHandler(cb) {
     this.getElement().querySelector(`.film-details__control-label--favorite`)
     .addEventListener(`click`, cb);
-    this.rerender();
+    this._favoriteClickHandler = cb;
   }
 }

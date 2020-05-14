@@ -34,8 +34,13 @@ export default class Filter extends AbstractComponent {
   }
 
   setFilterChangeHandler(handler) {
-    this.getElement().querySelectorAll(`a`).forEach((filter) => {
+    this.getElement().querySelectorAll(`.main-navigation__item`).forEach((filter) => {
       filter.addEventListener(`click`, (evt) => handler(evt.target.id));
     });
+  }
+
+  setStatsClickHandler(handler) {
+    this.getElement().querySelector(`.main-navigation__additional`)
+    .addEventListener(`click`, handler);
   }
 }

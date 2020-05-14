@@ -2,6 +2,7 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import {render, remove} from "../utils/render.js";
 import CommentComponent from "../components/comment.js";
 import {Keycodes} from "../const.js";
+import {encode} from "he";
 
 const createFilmDetailsTemplate = (filmData, emoji) => {
   const {image, age, title, originalTitle, rating, director, writers,
@@ -194,12 +195,12 @@ export default class FilmDetails extends AbstractSmartComponent {
   setNewCommentHandler() {
     const commentInput = this._getCommentInputElement();
     commentInput.addEventListener(`input`, () => {
-      this._newCommentTextValue = commentInput.value;
+      this._newCommentTextValue = encode(commentInput.value);
     });
     commentInput.addEventListener(`keydown`, (evt) => {
       if (evt.ctrlKey && evt.key === Keycodes.ENTER_KEY) {
         this._onCommentChange(null, {
-          comment: commentInput.value,
+          comment: encode(commentInput.value),
           date: new Date(),
           emotion: this._emoji,
           author: `Неавторизованный киноман`,

@@ -156,4 +156,14 @@ export default class PageController {
       render(container, filmsExtraComponent);
     });
   }
+
+  hide() {
+    this._container.hide();
+    this._sortListComponent.hide();
+  }
+
+  show() {
+    this._container.show();
+    this._sortListComponent.show();
+  }
 }

@@ -18,3 +18,11 @@ export const PopupMode = {
   DEFAULT: `default`,
   OPENED: `opened`,
 };
+
+export const StatsFilter = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`,
+};

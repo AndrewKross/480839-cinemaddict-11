@@ -73,6 +73,7 @@ let getRandomDesc = () => {
 
 const getFilmsData = (count) => {
   let generatedData = new Array(count).fill(``).map(() => {
+    let inHistoryFlag = Math.random() > 0.5;
     return Object.assign({}, films[getRandomInt(0, films.length)], {
       id: String(new Date() + Math.random()),
       age: ratingList[getRandomInt(0, ratingList.length)],
@@ -86,7 +87,8 @@ const getFilmsData = (count) => {
       duration: getRandomInt(30, 180),
       description: getRandomDesc(),
       inWatchlist: Math.random() > 0.5,
-      inHistory: Math.random() > 0.5,
+      inHistory: inHistoryFlag ? true : false,
+      watchingDate: inHistoryFlag ? getRandomDate(new Date(2019, 1, 1), new Date()) : false,
       inFavorites: Math.random() > 0.5,
       comments: generateCommentsData(getRandomInt(0, 6)),
     });

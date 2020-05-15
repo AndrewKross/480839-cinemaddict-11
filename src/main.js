@@ -30,12 +30,13 @@ pageController.render();
 
 render(footerStats, new FooterStatsComponent(filmsModel.getAllFilms()));
 
-const statsComponent = new StatsComponent();
+const statsComponent = new StatsComponent(filmsModel);
 render(siteMainElement, statsComponent, RenderPosition.BEFOREEND);
 statsComponent.hide();
 filterController.getFilterComponent().setStatsClickHandler(() => {
   pageController.hide();
   statsComponent.show();
+  statsComponent.render();
 });
 filterController.getFilterComponent().setFilterChangeHandler(() => {
   pageController.show();

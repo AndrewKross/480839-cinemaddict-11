@@ -159,9 +159,11 @@ export default class PageController {
 
   hide() {
     this._container.hide();
+    this._sortListComponent.hide();
   }
 
   show() {
     this._container.show();
+    this._sortListComponent.show();
   }
 }

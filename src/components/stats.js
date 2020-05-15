@@ -75,11 +75,12 @@ export default class Stats extends AbstractSmartComponent {
   }
 
   rerender() {
-    this._renderStatistics();
+    this._chart.destroy();
+    this._chart = this._renderStatistics();
   }
 
   render() {
-    this._renderStatistics();
+    this._chart = this._renderStatistics();
     this.addFilterChangeHandler();
   }
 
@@ -96,7 +97,6 @@ export default class Stats extends AbstractSmartComponent {
   _renderStatistics() {
     const genres = this._filmsModel.getGenresStatistics(this._filter);
     this._context = null;
-    this._chart = null;
 
     this._chart = new Chart(this._getContext(genres), {
       plugins: [ChartDataLabels],
@@ -153,6 +153,8 @@ export default class Stats extends AbstractSmartComponent {
         }
       }
     });
+
+    return this._chart;
   }
 
   addFilterChangeHandler() {

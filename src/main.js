@@ -11,6 +11,13 @@ import {render, RenderPosition, remove} from "./utils/render.js";
 
 const AUTHORIZATION = `Basic HfJ6w1Ufa215Ajs3Y`;
 
+const renderAfterLoad = (response) => {
+  remove(pageLoadingComponent);
+  filmsModel.setFilms(response);
+  pageController.render();
+  render(footerStats, new FooterStatsComponent(filmsModel.getAllFilms()));
+};
+
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const footerStats = document.querySelector(`.footer__statistics`);
@@ -29,9 +36,6 @@ const pageLoadingComponent = new PageLoadingComponent();
 render(filmsSectionComponent.getFilmsListElement(), pageLoadingComponent);
 
 const pageController = new PageController(filmsSectionComponent, filmsModel);
-
-render(footerStats, new FooterStatsComponent(filmsModel.getAllFilms()));
-
 const statsComponent = new StatsComponent(filmsModel);
 render(siteMainElement, statsComponent, RenderPosition.BEFOREEND);
 statsComponent.hide();
@@ -46,9 +50,6 @@ filterController.getFilterComponent().setFilterChangeHandler(() => {
 });
 
 api.getFilms()
-  .then((films) => {
-    remove(pageLoadingComponent);
-    filmsModel.setFilms(films);
-    pageController.render();
-  });
+  .then((films) => renderAfterLoad(films))
+  .catch(() => renderAfterLoad([]));
 

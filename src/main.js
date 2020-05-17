@@ -8,8 +8,7 @@ import PageController from "./controllers/page-controller.js";
 import FilterController from "./controllers/filter-controller.js";
 import FilmsModel from "./models/films-model.js";
 import {render, RenderPosition, remove} from "./utils/render.js";
-
-const AUTHORIZATION = `Basic HfJ6w1Ufa215Ajs3Y`;
+import {AUTHORIZATION} from "./const.js";
 
 const renderAfterLoad = (response) => {
   remove(pageLoadingComponent);

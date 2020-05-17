@@ -5,6 +5,19 @@ export default class CommentsModel {
     this._dataChangeHandlers = [];
   }
 
+  parseComments(commentsData) {
+    const parsedComments = commentsData.map((comment) => {
+      return {
+        id: comment[`id`],
+        author: comment[`author`],
+        comment: comment[`comment`],
+        date: new Date(comment[`date`]),
+        emotion: comment[`emotion`],
+      };
+    });
+    return parsedComments;
+  }
+
   getComments() {
     return this._comments;
   }

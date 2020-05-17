@@ -75,30 +75,31 @@ export default class Stats extends AbstractSmartComponent {
   }
 
   rerender() {
-    this._chart.destroy();
-    this._chart = this._renderStatistics();
+    super.rerender();
+    this._renderStatistics();
   }
 
   render() {
-    this._chart = this._renderStatistics();
+    this._renderStatistics();
     this.addFilterChangeHandler();
   }
 
-  _getContext(genres) {
-    this._context = this.getElement()
-      .querySelector(`.statistic__chart`)
-      .getContext(`2d`);
-
-    this._context.height = BAR_HEIGHT * Object.keys(genres).length;
-
-    return this._context;
+  _getStatisticChartElement() {
+    return this.getElement().querySelector(`.statistic__chart`);
   }
 
   _renderStatistics() {
     const genres = this._filmsModel.getGenresStatistics(this._filter);
-    this._context = null;
 
-    this._chart = new Chart(this._getContext(genres), {
+    if (this._chart) {
+      this._chart.destroy();
+      this._context = null;
+    }
+
+    this._context = this._getStatisticChartElement().getContext(`2d`);
+    this._context.height = BAR_HEIGHT * Object.keys(genres).length;
+
+    this._chart = new Chart(this._context, {
       plugins: [ChartDataLabels],
       type: `horizontalBar`,
       data: {
@@ -153,8 +154,6 @@ export default class Stats extends AbstractSmartComponent {
         }
       }
     });
-
-    return this._chart;
   }
 
   addFilterChangeHandler() {

@@ -1,8 +1,10 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {render, remove} from "../utils/render.js";
+import {formatDuration} from "../utils/common.js";
 import CommentComponent from "../components/comment.js";
 import {Keycodes} from "../const.js";
 import {encode} from "he";
+import moment from "moment";
 
 const createFilmDetailsTemplate = (filmData, emoji) => {
   const {image, age, title, originalTitle, rating, director, writers,
@@ -12,7 +14,9 @@ const createFilmDetailsTemplate = (filmData, emoji) => {
   const genresMarkup = genres.map((genre) => {
     return `<span class="film-details__genre">${genre}</span>`;
   }).join(`\n`);
+  const genresOrGenre = genres.length <= 1 ? `Genre` : `Genres`;
   const isChecked = (prop) => prop ? `checked` : ``;
+  const formatedRelease = moment(release).format(`DD MMMM YYYY`);
 
   return (
     `<section class="film-details">
@@ -55,18 +59,18 @@ const createFilmDetailsTemplate = (filmData, emoji) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${release}</td>
+                  <td class="film-details__cell">${formatedRelease}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${duration}</td>
+                  <td class="film-details__cell">${formatDuration(duration)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
                   <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genres</td>
+                  <td class="film-details__term">${genresOrGenre}</td>
                   <td class="film-details__cell">
                   ${genresMarkup}</td>
                 </tr>

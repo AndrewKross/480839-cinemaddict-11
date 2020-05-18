@@ -15,4 +15,8 @@ export default class FilmsSection extends AbstractComponent {
   getTemplate() {
     return createFilmsSectionTemplate();
   }
+
+  getFilmsListElement() {
+    return this.getElement().querySelector(`.films-list`);
+  }
 }

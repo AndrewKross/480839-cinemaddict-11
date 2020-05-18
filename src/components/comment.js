@@ -2,7 +2,7 @@ import AbstractComponent from "./abstract-component.js";
 import {formatCommentDate} from "../utils/common.js";
 
 const createCommentTemplate = (commentData) => {
-  const {emotion, comment, author, time} = commentData;
+  const {emotion, comment, author, date} = commentData;
 
   return (
     `<li class="film-details__comment">
@@ -13,7 +13,7 @@ const createCommentTemplate = (commentData) => {
           <p class="film-details__comment-text">${comment}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${author}</span>
-            <span class="film-details__comment-day">${formatCommentDate(time)}</span>
+            <span class="film-details__comment-day">${formatCommentDate(date)}</span>
             <button class="film-details__comment-delete">Delete</button>
           </p>
         </div>

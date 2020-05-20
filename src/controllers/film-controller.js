@@ -81,21 +81,21 @@ export default class FilmController {
         this._filmDetailsComponent.setNewCommentHandler();
 
         this._filmDetailsComponent.setFavoriteClickHandler(() => {
-          this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
-            inFavorites: !this._filmData.inFavorites
-          }));
+          const newFilm = FilmModel.clone(this._filmData);
+          newFilm.inFavorites = !newFilm.inFavorites;
+          this._onDataChange(this, this._filmData, newFilm);
         });
 
         this._filmDetailsComponent.setWatchedClickHandler(() => {
-          this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
-            inHistory: !this._filmData.inHistory
-          }));
+          const newFilm = FilmModel.clone(this._filmData);
+          newFilm.inHistory = !newFilm.inHistory;
+          this._onDataChange(this, this._filmData, newFilm);
         });
 
         this._filmDetailsComponent.setWatchlistClickHandler(() => {
-          this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
-            inWatchlist: !this._filmData.inWatchlist
-          }));
+          const newFilm = FilmModel.clone(this._filmData);
+          newFilm.inWatchlist = !newFilm.inWatchlist;
+          this._onDataChange(this, this._filmData, newFilm);
         });
 
         this._filmDetailsComponent.setEmojiChangeHandler();
@@ -122,16 +122,22 @@ export default class FilmController {
   }
 
   _onCommentChange(oldData, newData) {
-    let isSuccess = false;
-    if (newData === null) {
-      isSuccess = this._commentsModel.removeComment(oldData.id);
-    } else {
-      isSuccess = this._commentsModel.addComment(newData);
-    }
+    const api = new API(END_POINT, AUTHORIZATION);
 
-    if (isSuccess) {
-      this._commentsData = this._commentsModel.getComments();
-      this._filmDetailsComponent.renderComments(this._commentsData);
+    if (newData === null) {
+      api.deleteComment(oldData.id)
+      .then(() => {
+        this._commentsModel.removeComment(oldData.id);
+        this._commentsData = this._commentsModel.getComments();
+        this._filmDetailsComponent.renderComments(this._commentsData);
+      });
+    } else {
+      api.addComment(this._filmData, newData)
+      .then((loadedData) => {
+        this._commentsModel.setComments(loadedData.comments);
+        this._commentsData = this._commentsModel.getComments();
+        this._filmDetailsComponent.renderComments(this._commentsData);
+      });
     }
   }
 

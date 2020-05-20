@@ -18,6 +18,14 @@ export default class CommentsModel {
     return parsedComments;
   }
 
+  static commentToRaw(comment) {
+    return {
+      "comment": comment.comment,
+      "date": comment.date.toISOString(),
+      "emotion": comment.emotion
+    };
+  }
+
   getComments() {
     return this._comments;
   }

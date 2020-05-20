@@ -207,7 +207,6 @@ export default class FilmDetails extends AbstractSmartComponent {
           comment: encode(commentInput.value),
           date: new Date(),
           emotion: this._emoji,
-          author: `Неавторизованный киноман`,
         });
         commentInput.value = ``;
         this._newCommentTextValue = ``;
@@ -227,7 +226,8 @@ export default class FilmDetails extends AbstractSmartComponent {
   rerender() {
     super.rerender();
     this.renderComments(this._commentsData);
-    this._getCommentInputElement().value = this._newCommentTextValue;
+    this._getCommentInputElement().value = this._newCommentTextValue
+      ? this._newCommentTextValue : ``;
   }
 
   setEmoji(emoji) {

@@ -7,6 +7,7 @@ import {render, remove, replace} from "../utils/render.js";
 import {Keycodes, PopupMode} from "../const.js";
 import {AUTHORIZATION, END_POINT} from "../const.js";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
 const body = document.querySelector(`body`);
 
 export default class FilmController {
@@ -71,8 +72,7 @@ export default class FilmController {
 
     api.getComments(this._filmData.id)
       .then((comments) => {
-        const parsedComments = this._commentsModel.parseComments(comments);
-        this._commentsModel.setComments(parsedComments);
+        this._commentsModel.setComments(comments);
         this._commentsData = this._commentsModel.getComments();
 
         this._filmDetailsComponent = new FilmDetailsComponent(this._filmData, this._commentsData, this._onCommentChange);
@@ -81,21 +81,21 @@ export default class FilmController {
         this._filmDetailsComponent.setNewCommentHandler();
 
         this._filmDetailsComponent.setFavoriteClickHandler(() => {
-          this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
-            inFavorites: !this._filmData.inFavorites
-          }));
+          const newFilm = FilmModel.clone(this._filmData);
+          newFilm.inFavorites = !newFilm.inFavorites;
+          this._onDataChange(this, this._filmData, newFilm);
         });
 
         this._filmDetailsComponent.setWatchedClickHandler(() => {
-          this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
-            inHistory: !this._filmData.inHistory
-          }));
+          const newFilm = FilmModel.clone(this._filmData);
+          newFilm.inHistory = !newFilm.inHistory;
+          this._onDataChange(this, this._filmData, newFilm);
         });
 
         this._filmDetailsComponent.setWatchlistClickHandler(() => {
-          this._onDataChange(this, this._filmData, Object.assign({}, this._filmData, {
-            inWatchlist: !this._filmData.inWatchlist
-          }));
+          const newFilm = FilmModel.clone(this._filmData);
+          newFilm.inWatchlist = !newFilm.inWatchlist;
+          this._onDataChange(this, this._filmData, newFilm);
         });
 
         this._filmDetailsComponent.setEmojiChangeHandler();
@@ -121,17 +121,44 @@ export default class FilmController {
     document.removeEventListener(`keydown`, this._closePopupOnEscPress);
   }
 
-  _onCommentChange(oldData, newData) {
-    let isSuccess = false;
-    if (newData === null) {
-      isSuccess = this._commentsModel.removeComment(oldData.id);
-    } else {
-      isSuccess = this._commentsModel.addComment(newData);
-    }
+  _onCommentChange(oldData, newData, commentComponent) {
+    const api = new API(END_POINT, AUTHORIZATION);
 
-    if (isSuccess) {
-      this._commentsData = this._commentsModel.getComments();
-      this._filmDetailsComponent.renderComments(this._commentsData);
+    if (newData === null) {
+      // удаление комментария
+      commentComponent.getDeleteButton().disabled = true;
+      commentComponent.getDeleteButton().textContent = `Deleting...`;
+      api.deleteComment(oldData.id)
+      .then(() => {
+        this._commentsModel.removeComment(oldData.id);
+        this._commentsData = this._commentsModel.getComments();
+        this._filmDetailsComponent.renderComments(this._commentsData);
+        this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldData.id);
+        this.render(this._filmData);
+      })
+      .catch(() => {
+        this.shakeComment(commentComponent);
+        commentComponent.getDeleteButton().disabled = false;
+      });
+    } else {
+      // добавление комментария
+      this._filmDetailsComponent.getCommentInputElement().disabled = true;
+      this._filmDetailsComponent.getCommentInputElement().style.outline = `none`;
+      api.addComment(this._filmData, newData)
+      .then((loadedData) => {
+        this._filmData = loadedData.movie;
+        this._commentsModel.setComments(loadedData.comments);
+        this._commentsData = this._commentsModel.getComments();
+        this._filmDetailsComponent.renderComments(this._commentsData);
+        this.render(this._filmData);
+      })
+      .catch(() => {
+        this.shakeNewComment(commentComponent);
+        this._filmDetailsComponent.getCommentInputElement().style.outline = `2px solid red`;
+      })
+      .then(() => {
+        this._filmDetailsComponent.getCommentInputElement().disabled = false;
+      });
     }
   }
 
@@ -144,5 +171,21 @@ export default class FilmController {
       remove(this._filmDetailsComponent);
       this._popupMode = PopupMode.DEFAULT;
     }
+  }
+
+  shakeNewComment() {
+    this._filmDetailsComponent.getNewCommentElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._filmDetailsComponent.getNewCommentElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  shakeComment(commentComponent) {
+    commentComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      commentComponent.getElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 }

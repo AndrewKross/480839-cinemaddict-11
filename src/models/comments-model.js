@@ -5,7 +5,7 @@ export default class CommentsModel {
     this._dataChangeHandlers = [];
   }
 
-  parseComments(commentsData) {
+  static parseComments(commentsData) {
     const parsedComments = commentsData.map((comment) => {
       return {
         id: comment[`id`],
@@ -16,6 +16,14 @@ export default class CommentsModel {
       };
     });
     return parsedComments;
+  }
+
+  static commentToRaw(comment) {
+    return {
+      "comment": comment.comment,
+      "date": comment.date.toISOString(),
+      "emotion": comment.emotion
+    };
   }
 
   getComments() {

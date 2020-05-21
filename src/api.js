@@ -45,6 +45,29 @@ const API = class {
     .then(FilmModel.parseFilm);
   }
 
+  addComment(filmData, commentData) {
+    return this._load({
+      url: `comments/${filmData.id}`,
+      headers: new Headers({"Content-Type": `application/json`}),
+      method: `POST`,
+      body: JSON.stringify(CommentsModel.commentToRaw(commentData)),
+    })
+      .then((response) => response.json())
+      .then(({movie, comments}) => {
+        return {
+          movie: FilmModel.parseFilm(movie),
+          comments: CommentsModel.parseComments(comments)
+        };
+      });
+  }
+
+  deleteComment(commentId) {
+    return this._load({
+      url: `comments/${commentId}`,
+      method: `DELETE`,
+    });
+  }
+
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(`Authorization`, this._authorization);
 

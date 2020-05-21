@@ -165,7 +165,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       this._showedCommentsComponents.push(commentComponent);
       commentComponent.setDeleteCommentHandler((evt) => {
         evt.preventDefault();
-        this._onCommentChange(comment, null);
+        this._onCommentChange(comment, null, commentComponent);
       });
       render(this._getCommentsListElement(), commentComponent);
     });
@@ -188,8 +188,12 @@ export default class FilmDetails extends AbstractSmartComponent {
     return this.getElement().querySelector(`.film-details__comments-list`);
   }
 
-  _getCommentInputElement() {
+  getCommentInputElement() {
     return this.getElement().querySelector(`.film-details__comment-input`);
+  }
+
+  getNewCommentElement() {
+    return this.getElement().querySelector(`.film-details__new-comment`);
   }
 
   setNewFilmData(newFilmData) {
@@ -197,20 +201,21 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setNewCommentHandler() {
-    const commentInput = this._getCommentInputElement();
+    const commentInput = this.getCommentInputElement();
     commentInput.addEventListener(`input`, () => {
       this._newCommentTextValue = encode(commentInput.value);
     });
     commentInput.addEventListener(`keydown`, (evt) => {
       if (evt.ctrlKey && evt.key === Keycodes.ENTER_KEY) {
-        this._onCommentChange(null, {
-          comment: encode(commentInput.value),
-          date: new Date(),
-          emotion: this._emoji,
-          author: `Неавторизованный киноман`,
-        });
-        commentInput.value = ``;
-        this._newCommentTextValue = ``;
+        if (commentInput.value && this._emoji) {
+          this._onCommentChange(null, {
+            comment: encode(commentInput.value),
+            date: new Date(),
+            emotion: this._emoji,
+          });
+          commentInput.value = ``;
+          this._newCommentTextValue = ``;
+        }
       }
     });
   }
@@ -227,7 +232,8 @@ export default class FilmDetails extends AbstractSmartComponent {
   rerender() {
     super.rerender();
     this.renderComments(this._commentsData);
-    this._getCommentInputElement().value = this._newCommentTextValue;
+    this.getCommentInputElement().value = this._newCommentTextValue
+      ? this._newCommentTextValue : ``;
   }
 
   setEmoji(emoji) {

@@ -7,6 +7,7 @@ import {render, remove, replace} from "../utils/render.js";
 import {Keycodes, PopupMode} from "../const.js";
 import {AUTHORIZATION, END_POINT} from "../const.js";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
 const body = document.querySelector(`body`);
 
 export default class FilmController {
@@ -120,10 +121,13 @@ export default class FilmController {
     document.removeEventListener(`keydown`, this._closePopupOnEscPress);
   }
 
-  _onCommentChange(oldData, newData) {
+  _onCommentChange(oldData, newData, commentComponent) {
     const api = new API(END_POINT, AUTHORIZATION);
 
     if (newData === null) {
+      // удаление комментария
+      commentComponent.getDeleteButton().disabled = true;
+      commentComponent.getDeleteButton().textContent = `Deleting...`;
       api.deleteComment(oldData.id)
       .then(() => {
         this._commentsModel.removeComment(oldData.id);
@@ -131,8 +135,15 @@ export default class FilmController {
         this._filmDetailsComponent.renderComments(this._commentsData);
         this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldData.id);
         this.render(this._filmData);
+      })
+      .catch(() => {
+        this.shakeComment(commentComponent);
+        commentComponent.getDeleteButton().disabled = false;
       });
     } else {
+      // добавление комментария
+      this._filmDetailsComponent.getCommentInputElement().disabled = true;
+      this._filmDetailsComponent.getCommentInputElement().style.outline = `none`;
       api.addComment(this._filmData, newData)
       .then((loadedData) => {
         this._filmData = loadedData.movie;
@@ -140,6 +151,13 @@ export default class FilmController {
         this._commentsData = this._commentsModel.getComments();
         this._filmDetailsComponent.renderComments(this._commentsData);
         this.render(this._filmData);
+      })
+      .catch(() => {
+        this.shakeNewComment(commentComponent);
+        this._filmDetailsComponent.getCommentInputElement().style.outline = `2px solid red`;
+      })
+      .then(() => {
+        this._filmDetailsComponent.getCommentInputElement().disabled = false;
       });
     }
   }
@@ -153,5 +171,21 @@ export default class FilmController {
       remove(this._filmDetailsComponent);
       this._popupMode = PopupMode.DEFAULT;
     }
+  }
+
+  shakeNewComment() {
+    this._filmDetailsComponent.getNewCommentElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._filmDetailsComponent.getNewCommentElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  shakeComment(commentComponent) {
+    commentComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      commentComponent.getElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 }

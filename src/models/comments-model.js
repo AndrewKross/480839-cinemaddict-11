@@ -5,7 +5,7 @@ export default class CommentsModel {
     this._dataChangeHandlers = [];
   }
 
-  parseComments(commentsData) {
+  static parseComments(commentsData) {
     const parsedComments = commentsData.map((comment) => {
       return {
         id: comment[`id`],

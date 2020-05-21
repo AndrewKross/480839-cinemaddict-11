@@ -52,7 +52,13 @@ const API = class {
       method: `POST`,
       body: JSON.stringify(CommentsModel.commentToRaw(commentData)),
     })
-      .then((response) => response.json());
+      .then((response) => response.json())
+      .then(({movie, comments}) => {
+        return {
+          movie: FilmModel.parseFilm(movie),
+          comments: CommentsModel.parseComments(comments)
+        };
+      });
   }
 
   deleteComment(commentId) {

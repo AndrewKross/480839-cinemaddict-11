@@ -71,8 +71,7 @@ export default class FilmController {
 
     api.getComments(this._filmData.id)
       .then((comments) => {
-        const parsedComments = this._commentsModel.parseComments(comments);
-        this._commentsModel.setComments(parsedComments);
+        this._commentsModel.setComments(comments);
         this._commentsData = this._commentsModel.getComments();
 
         this._filmDetailsComponent = new FilmDetailsComponent(this._filmData, this._commentsData, this._onCommentChange);
@@ -130,13 +129,17 @@ export default class FilmController {
         this._commentsModel.removeComment(oldData.id);
         this._commentsData = this._commentsModel.getComments();
         this._filmDetailsComponent.renderComments(this._commentsData);
+        this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldData.id);
+        this.render(this._filmData);
       });
     } else {
       api.addComment(this._filmData, newData)
       .then((loadedData) => {
+        this._filmData = loadedData.movie;
         this._commentsModel.setComments(loadedData.comments);
         this._commentsData = this._commentsModel.getComments();
         this._filmDetailsComponent.renderComments(this._commentsData);
+        this.render(this._filmData);
       });
     }
   }

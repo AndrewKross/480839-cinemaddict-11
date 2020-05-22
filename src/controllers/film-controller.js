@@ -134,11 +134,13 @@ export default class FilmController {
         this._commentsData = this._commentsModel.getComments();
         this._filmDetailsComponent.renderComments(this._commentsData);
         this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldData.id);
+        this._onDataChange();
         this.render(this._filmData);
       })
       .catch(() => {
         this.shakeComment(commentComponent);
         commentComponent.getDeleteButton().disabled = false;
+        commentComponent.getDeleteButton().textContent = `Delete`;
       });
     } else {
       // добавление комментария
@@ -150,6 +152,7 @@ export default class FilmController {
         this._commentsModel.setComments(loadedData.comments);
         this._commentsData = this._commentsModel.getComments();
         this._filmDetailsComponent.renderComments(this._commentsData);
+        this._onDataChange();
         this.render(this._filmData);
       })
       .catch(() => {

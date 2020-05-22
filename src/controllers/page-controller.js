@@ -4,7 +4,10 @@ import NoFilmsComponent from "../components/no-films.js";
 import FilmController from "./film-controller.js";
 import SortListComponent, {SortType} from "../components/sort.js";
 import {render, remove, RenderPosition} from "../utils/render.js";
-import {EXTRA_FILMS_COUNT, SHOWING_FILMS_COUNT_BY_BUTTON, SHOWING_FILMS_COUNT_ON_START} from "../const.js";
+import {getTopRatedFilms, getMostCommentedFilms} from "../utils/common.js";
+import {SHOWING_FILMS_COUNT_BY_BUTTON, SHOWING_FILMS_COUNT_ON_START} from "../const.js";
+
+const EXTRA_FILMS_TITLES = [`Top rated`, `Most commented`];
 
 const renderFilms = (container, filmsData, onDataChange, onViewChange) => {
   return filmsData.map((film) => {
@@ -68,7 +71,7 @@ export default class PageController {
 
     this._renderFilms(filmsData.slice(0, this._showingFilmsCount));
     this._renderShowMoreButton(filmsData);
-    this._renderExtraFilms(filmsData);
+    this._renderExtraFilms();
   }
 
   _removeFilms() {
@@ -102,14 +105,19 @@ export default class PageController {
   }
 
   _onDataChange(filmController, oldData, newData) {
-    this._api.updateFilm(oldData.id, newData)
-    .then((loadedFilmData) => {
-      const isSuccess = this._filmsModel.updateFilm(oldData.id, loadedFilmData);
+    if (filmController) {
+      this._api.updateFilm(oldData.id, newData)
+      .then((loadedFilmData) => {
+        const isSuccess = this._filmsModel.updateFilm(oldData.id, loadedFilmData);
 
-      if (isSuccess) {
-        filmController.render(loadedFilmData);
-      }
-    });
+        if (isSuccess) {
+          filmController.render(loadedFilmData);
+          this._renderExtraFilms();
+        }
+      });
+    } else {
+      this._renderExtraFilms();
+    }
   }
 
   _onViewChange() {
@@ -143,19 +151,25 @@ export default class PageController {
     this._updateFilms(SHOWING_FILMS_COUNT_ON_START);
   }
 
-  _renderExtraFilms(filmsData) {
-    const EXTRA_FILMS_TITLES = [`Top rated`, `Most commented`];
-    const container = this._container.getElement();
+  _renderExtraFilms() {
+    if (this._topRatedFilmsComponent && this._mostCommentedFilmsComponent) {
+      remove(this._topRatedFilmsComponent);
+      remove(this._mostCommentedFilmsComponent);
+    }
 
-    EXTRA_FILMS_TITLES.forEach((it) => {
-      const filmsExtraComponent = new FilmsExtraComponent(it);
-      const extraContainer = filmsExtraComponent.getElement().querySelector(`.films-list__container`);
-      for (let i = 0; i < EXTRA_FILMS_COUNT; i++) {
-        const movieControllerExtra = new FilmController(extraContainer, this._onDataChange);
-        movieControllerExtra.render(filmsData[i]);
-      }
-      render(container, filmsExtraComponent);
-    });
+    this._topRatedFilmsComponent = new FilmsExtraComponent(EXTRA_FILMS_TITLES[0]);
+    this._mostCommentedFilmsComponent = new FilmsExtraComponent(EXTRA_FILMS_TITLES[1]);
+    const container = this._container.getElement();
+    const filmsData = this._filmsModel.getAllFilms();
+
+    this._topRatedFilmsControllers = renderFilms(this._topRatedFilmsComponent.getFilmsListContainer(),
+        getTopRatedFilms(filmsData), this._onDataChange, this._onViewChange);
+
+    this._mostCommentedFilmsControllers = renderFilms(this._mostCommentedFilmsComponent.getFilmsListContainer(),
+        getMostCommentedFilms(filmsData), this._onDataChange, this._onViewChange);
+
+    render(container, this._topRatedFilmsComponent);
+    render(container, this._mostCommentedFilmsComponent);
   }
 
   hide() {

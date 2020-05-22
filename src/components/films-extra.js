@@ -18,4 +18,8 @@ export default class FilmsExtra extends AbstractComponent {
   getTemplate() {
     return createFilmsExtraTemplate(this._title);
   }
+
+  getFilmsListContainer() {
+    return this.getElement().querySelector(`.films-list__container`);
+  }
 }

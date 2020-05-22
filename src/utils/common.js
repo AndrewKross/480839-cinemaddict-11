@@ -55,3 +55,11 @@ export const sortObject = (list) => {
 
   return orderedList;
 };
+
+export const getTopRatedFilms = (filmsData) => {
+  return filmsData.sort((a, b) => b.rating - a.rating).filter((it, i) => i < 2);
+};
+
+export const getMostCommentedFilms = (filmsData) => {
+  return filmsData.sort((a, b) => b.comments.length - a.comments.length).filter((it, i) => i < 2);
+};

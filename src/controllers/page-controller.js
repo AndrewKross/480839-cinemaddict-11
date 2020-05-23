@@ -7,7 +7,10 @@ import {render, remove, RenderPosition} from "../utils/render.js";
 import {getTopRatedFilms, getMostCommentedFilms} from "../utils/common.js";
 import {SHOWING_FILMS_COUNT_BY_BUTTON, SHOWING_FILMS_COUNT_ON_START} from "../const.js";
 
-const EXTRA_FILMS_TITLES = [`Top rated`, `Most commented`];
+const EXTRA_FILMS_TITLES = {
+  topRated: `Top rated`,
+  mostCommented: `Most commented`
+};
 
 const renderFilms = (container, filmsData, onDataChange, onViewChange) => {
   return filmsData.map((film) => {
@@ -104,18 +107,27 @@ export default class PageController {
     this._renderShowMoreButton();
   }
 
-  _onDataChange(filmController, oldData, newData) {
-    if (filmController) {
+  _updateFilm(oldData, newData) {
+    const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
+
+    if (isSuccess) {
+      [...this._showedFilmsControllers, ...this._topRatedFilmsControllers, ...this._mostCommentedFilmsControllers]
+          .forEach((controller) => {
+            if (controller.getFilmData().id === oldData.id) {
+              controller.render(newData);
+            }
+          });
+    }
+  }
+
+  _onDataChange(oldData, newData) {
+    if (newData) {
       this._api.updateFilm(oldData.id, newData)
       .then((loadedFilmData) => {
-        const isSuccess = this._filmsModel.updateFilm(oldData.id, loadedFilmData);
-
-        if (isSuccess) {
-          filmController.render(loadedFilmData);
-          this._renderExtraFilms();
-        }
+        this._updateFilm(oldData, loadedFilmData);
       });
     } else {
+      this._updateFilm(oldData, oldData);
       this._renderExtraFilms();
     }
   }
@@ -157,8 +169,8 @@ export default class PageController {
       remove(this._mostCommentedFilmsComponent);
     }
 
-    this._topRatedFilmsComponent = new FilmsExtraComponent(EXTRA_FILMS_TITLES[0]);
-    this._mostCommentedFilmsComponent = new FilmsExtraComponent(EXTRA_FILMS_TITLES[1]);
+    this._topRatedFilmsComponent = new FilmsExtraComponent(EXTRA_FILMS_TITLES.topRated);
+    this._mostCommentedFilmsComponent = new FilmsExtraComponent(EXTRA_FILMS_TITLES.mostCommented);
     const container = this._container.getElement();
     const filmsData = this._filmsModel.getAllFilms();
 
@@ -170,6 +182,8 @@ export default class PageController {
 
     render(container, this._topRatedFilmsComponent);
     render(container, this._mostCommentedFilmsComponent);
+    // TODO: При добавлении комментария в разделе экстра нигде не обновляется счетчик
+    // При удалении комментария счетчик обновляется только в экстра
   }
 
   hide() {

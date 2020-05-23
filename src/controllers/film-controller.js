@@ -37,19 +37,19 @@ export default class FilmController {
       evt.preventDefault();
       const newFilm = FilmModel.clone(this._filmData);
       newFilm.inFavorites = !newFilm.inFavorites;
-      this._onDataChange(this, this._filmData, newFilm);
+      this._onDataChange(this._filmData, newFilm);
     });
     this._filmCardComponent.setWatchlistClickHandler((evt) => {
       evt.preventDefault();
       const newFilm = FilmModel.clone(this._filmData);
       newFilm.inWatchlist = !newFilm.inWatchlist;
-      this._onDataChange(this, this._filmData, newFilm);
+      this._onDataChange(this._filmData, newFilm);
     });
     this._filmCardComponent.setWatchedClickHandler((evt) => {
       evt.preventDefault();
       const newFilm = FilmModel.clone(this._filmData);
       newFilm.inHistory = !newFilm.inHistory;
-      this._onDataChange(this, this._filmData, newFilm);
+      this._onDataChange(this._filmData, newFilm);
     });
 
     this._filmCardComponent.setPopupClickHandler(() => {
@@ -83,19 +83,19 @@ export default class FilmController {
         this._filmDetailsComponent.setFavoriteClickHandler(() => {
           const newFilm = FilmModel.clone(this._filmData);
           newFilm.inFavorites = !newFilm.inFavorites;
-          this._onDataChange(this, this._filmData, newFilm);
+          this._onDataChange(this._filmData, newFilm);
         });
 
         this._filmDetailsComponent.setWatchedClickHandler(() => {
           const newFilm = FilmModel.clone(this._filmData);
           newFilm.inHistory = !newFilm.inHistory;
-          this._onDataChange(this, this._filmData, newFilm);
+          this._onDataChange(this._filmData, newFilm);
         });
 
         this._filmDetailsComponent.setWatchlistClickHandler(() => {
           const newFilm = FilmModel.clone(this._filmData);
           newFilm.inWatchlist = !newFilm.inWatchlist;
-          this._onDataChange(this, this._filmData, newFilm);
+          this._onDataChange(this._filmData, newFilm);
         });
 
         this._filmDetailsComponent.setEmojiChangeHandler();
@@ -105,6 +105,10 @@ export default class FilmController {
 
         document.addEventListener(`keydown`, this._closePopupOnEscPress);
       });
+  }
+
+  getFilmData() {
+    return this._filmData;
   }
 
   _closePopupOnEscPress(evt) {
@@ -134,7 +138,7 @@ export default class FilmController {
         this._commentsData = this._commentsModel.getComments();
         this._filmDetailsComponent.renderComments(this._commentsData);
         this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldData.id);
-        this._onDataChange();
+        this._onDataChange(this._filmData);
         this.render(this._filmData);
       })
       .catch(() => {
@@ -152,7 +156,7 @@ export default class FilmController {
         this._commentsModel.setComments(loadedData.comments);
         this._commentsData = this._commentsModel.getComments();
         this._filmDetailsComponent.renderComments(this._commentsData);
-        this._onDataChange();
+        this._onDataChange(this._filmData);
         this.render(this._filmData);
       })
       .catch(() => {

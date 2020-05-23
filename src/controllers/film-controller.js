@@ -1,10 +1,12 @@
 import API from "../api/index.js";
+import Provider from "../api/provider.js";
+import Store from "../api/store.js";
 import FilmDetailsComponent from "../components/film-details.js";
 import FilmCardComponent from "../components/film-card.js";
 import CommentsModel from "../models/comments-model";
 import FilmModel from "../models/film-model.js";
 import {render, remove, replace} from "../utils/render.js";
-import {Keycodes, PopupMode} from "../const.js";
+import {Keycodes, PopupMode, STORE_NAME} from "../const.js";
 import {AUTHORIZATION, END_POINT} from "../const.js";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
@@ -68,42 +70,44 @@ export default class FilmController {
 
   setPopup() {
     const api = new API(END_POINT, AUTHORIZATION);
+    const store = new Store(STORE_NAME, window.localStorage);
+    this._apiWithProvider = new Provider(api, store);
     this._commentsModel = new CommentsModel();
+    this._filmDetailsComponent = new FilmDetailsComponent(this._filmData, this._onCommentChange);
+    this._filmDetailsComponent.setCloseButtonClickHandler(() => this._closePopup());
+    this._filmDetailsComponent.setNewCommentHandler();
+    this._filmDetailsComponent.setEmojiChangeHandler();
 
-    api.getComments(this._filmData.id)
+    this._filmDetailsComponent.setFavoriteClickHandler(() => {
+      const newFilm = FilmModel.clone(this._filmData);
+      newFilm.inFavorites = !newFilm.inFavorites;
+      this._onDataChange(this._filmData, newFilm);
+    });
+
+    this._filmDetailsComponent.setWatchedClickHandler(() => {
+      const newFilm = FilmModel.clone(this._filmData);
+      newFilm.inHistory = !newFilm.inHistory;
+      this._onDataChange(this._filmData, newFilm);
+    });
+
+    this._filmDetailsComponent.setWatchlistClickHandler(() => {
+      const newFilm = FilmModel.clone(this._filmData);
+      newFilm.inWatchlist = !newFilm.inWatchlist;
+      this._onDataChange(this._filmData, newFilm);
+    });
+
+    render(body, this._filmDetailsComponent);
+
+    document.addEventListener(`keydown`, this._closePopupOnEscPress);
+
+    this._apiWithProvider.getComments(this._filmData.id)
       .then((comments) => {
         this._commentsModel.setComments(comments);
         this._commentsData = this._commentsModel.getComments();
-
-        this._filmDetailsComponent = new FilmDetailsComponent(this._filmData, this._commentsData, this._onCommentChange);
-
-        this._filmDetailsComponent.setCloseButtonClickHandler(() => this._closePopup());
-        this._filmDetailsComponent.setNewCommentHandler();
-
-        this._filmDetailsComponent.setFavoriteClickHandler(() => {
-          const newFilm = FilmModel.clone(this._filmData);
-          newFilm.inFavorites = !newFilm.inFavorites;
-          this._onDataChange(this._filmData, newFilm);
-        });
-
-        this._filmDetailsComponent.setWatchedClickHandler(() => {
-          const newFilm = FilmModel.clone(this._filmData);
-          newFilm.inHistory = !newFilm.inHistory;
-          this._onDataChange(this._filmData, newFilm);
-        });
-
-        this._filmDetailsComponent.setWatchlistClickHandler(() => {
-          const newFilm = FilmModel.clone(this._filmData);
-          newFilm.inWatchlist = !newFilm.inWatchlist;
-          this._onDataChange(this._filmData, newFilm);
-        });
-
-        this._filmDetailsComponent.setEmojiChangeHandler();
-
-        render(body, this._filmDetailsComponent);
         this._filmDetailsComponent.renderComments(this._commentsData);
-
-        document.addEventListener(`keydown`, this._closePopupOnEscPress);
+      })
+      .catch(() => {
+        this._filmDetailsComponent.onLoadCommentsError();
       });
   }
 
@@ -126,13 +130,11 @@ export default class FilmController {
   }
 
   _onCommentChange(oldData, newData, commentComponent) {
-    const api = new API(END_POINT, AUTHORIZATION);
-
     if (newData === null) {
       // удаление комментария
       commentComponent.getDeleteButton().disabled = true;
       commentComponent.getDeleteButton().textContent = `Deleting...`;
-      api.deleteComment(oldData.id)
+      this._apiWithProvider.deleteComment(oldData.id)
       .then(() => {
         this._commentsModel.removeComment(oldData.id);
         this._commentsData = this._commentsModel.getComments();
@@ -148,9 +150,9 @@ export default class FilmController {
       });
     } else {
       // добавление комментария
-      this._filmDetailsComponent.getCommentInputElement().disabled = true;
+      this._filmDetailsComponent.disableFormElements();
       this._filmDetailsComponent.getCommentInputElement().style.outline = `none`;
-      api.addComment(this._filmData, newData)
+      this._apiWithProvider.addComment(this._filmData, newData)
       .then((loadedData) => {
         this._filmData = loadedData.movie;
         this._commentsModel.setComments(loadedData.comments);
@@ -164,7 +166,7 @@ export default class FilmController {
         this._filmDetailsComponent.getCommentInputElement().style.outline = `2px solid red`;
       })
       .then(() => {
-        this._filmDetailsComponent.getCommentInputElement().disabled = false;
+        this._filmDetailsComponent.enableFormElements();
       });
     }
   }

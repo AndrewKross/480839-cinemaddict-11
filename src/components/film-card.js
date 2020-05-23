@@ -1,6 +1,8 @@
 import {formatDuration} from "../utils/common.js";
 import AbstractComponent from "./abstract-component.js";
 
+const MAX_DESCRIPTION_LENGTH = 140;
+
 const createFilmCardTemplate = (filmData) => {
   const {title, rating, release, duration, genres, image, description, inWatchlist, inHistory, inFavorites} = filmData;
   const commentsCount = filmData.comments.length;
@@ -9,6 +11,7 @@ const createFilmCardTemplate = (filmData) => {
   const inWatchlistActiveClass = inWatchlist ? `film-card__controls-item--active` : ``;
   const inHistoryActiveClass = inHistory ? `film-card__controls-item--active` : ``;
   const inFavoritesActiveClass = inFavorites ? `film-card__controls-item--active` : ``;
+  const filmDescription = description.length > MAX_DESCRIPTION_LENGTH ? description.slice(0, MAX_DESCRIPTION_LENGTH - 1) + `...` : description;
   return (
     `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
@@ -19,7 +22,7 @@ const createFilmCardTemplate = (filmData) => {
         <span class="film-card__genre">${genres[0]}</span>
       </p>
       <img src="${image}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <p class="film-card__description">${filmDescription}</p>
       <a class="film-card__comments">${commentsCount} ${commentOrComments}</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${inWatchlistActiveClass}">Add to watchlist</button>

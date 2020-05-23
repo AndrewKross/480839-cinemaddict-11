@@ -17,6 +17,8 @@ const renderAfterLoad = (response) => {
 
   remove(pageLoadingComponent);
   filmsModel.setFilms(response);
+
+  render(siteHeaderElement, new ProfileRatingComponent(filmsModel));
   pageController.render();
   render(footerStats, new FooterStatsComponent(filmsModel.getAllFilms()));
   render(siteMainElement, statsComponent, RenderPosition.BEFOREEND);
@@ -40,8 +42,6 @@ const api = new API(END_POINT, AUTHORIZATION);
 const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const filmsModel = new FilmsModel();
-
-render(siteHeaderElement, new ProfileRatingComponent());
 
 const filterController = new FilterController(siteMainElement, filmsModel);
 filterController.render();

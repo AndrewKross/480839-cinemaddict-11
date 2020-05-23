@@ -1,5 +1,6 @@
 import moment from "moment";
 import momentDurationFormatSetup from 'moment-duration-format';
+import {EXTRA_FILMS_COUNT} from "../const";
 momentDurationFormatSetup(moment);
 
 export const getRandomInt = (min, max) => { // максимум не включается, минимум включается
@@ -57,9 +58,9 @@ export const sortObject = (list) => {
 };
 
 export const getTopRatedFilms = (filmsData) => {
-  return filmsData.sort((a, b) => b.rating - a.rating).filter((it, i) => i < 2);
+  return filmsData.sort((a, b) => b.rating - a.rating).filter((it, i) => i < EXTRA_FILMS_COUNT);
 };
 
 export const getMostCommentedFilms = (filmsData) => {
-  return filmsData.sort((a, b) => b.comments.length - a.comments.length).filter((it, i) => i < 2);
+  return filmsData.sort((a, b) => b.comments.length - a.comments.length).filter((it, i) => i < EXTRA_FILMS_COUNT);
 };

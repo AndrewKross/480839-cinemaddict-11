@@ -1,4 +1,4 @@
-import API from "../api.js";
+import API from "../api/index.js";
 import FilmDetailsComponent from "../components/film-details.js";
 import FilmCardComponent from "../components/film-card.js";
 import CommentsModel from "../models/comments-model";

@@ -26,7 +26,7 @@ const getSortedFilms = (films, sortType, from, to) => {
 
   switch (sortType) {
     case SortType.DATE:
-      sortedFilms = showingFilms.sort((a, b) => b.release.slice(-4) - a.release.slice(-4)); // временная сортировка по годам
+      sortedFilms = showingFilms.sort((a, b) => b.release - a.release);
       break;
     case SortType.RATING:
       sortedFilms = showingFilms.sort((a, b) => b.rating - a.rating);
@@ -182,8 +182,6 @@ export default class PageController {
 
     render(container, this._topRatedFilmsComponent);
     render(container, this._mostCommentedFilmsComponent);
-    // TODO: При добавлении комментария в разделе экстра нигде не обновляется счетчик
-    // При удалении комментария счетчик обновляется только в экстра
   }
 
   hide() {

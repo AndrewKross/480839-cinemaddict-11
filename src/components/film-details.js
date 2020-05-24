@@ -139,10 +139,9 @@ const createFilmDetailsTemplate = (filmData, emoji) => {
 };
 
 export default class FilmDetails extends AbstractSmartComponent {
-  constructor(filmData, commentsData, onCommentChange) {
+  constructor(filmData, onCommentChange) {
     super();
     this._filmData = filmData;
-    this._commentsData = commentsData;
     this._onCommentChange = onCommentChange;
     this._showedCommentsComponents = [];
     this._emoji = null;
@@ -234,6 +233,26 @@ export default class FilmDetails extends AbstractSmartComponent {
     this.renderComments(this._commentsData);
     this.getCommentInputElement().value = this._newCommentTextValue
       ? this._newCommentTextValue : ``;
+  }
+
+  onLoadCommentsError() {
+    const errorMessage = `Unable to load comments. Please check your internet connection and try again.`;
+    this.getElement().querySelector(`.film-details__comments-title`).textContent = errorMessage;
+    this.disableFormElements();
+  }
+
+  disableFormElements() {
+    const formElements = this.getElement().querySelectorAll(`textarea, input`);
+    formElements.forEach((element) => {
+      element.disabled = true;
+    });
+  }
+
+  enableFormElements() {
+    const formElements = this.getElement().querySelectorAll(`textarea, input`);
+    formElements.forEach((element) => {
+      element.disabled = false;
+    });
   }
 
   setEmoji(emoji) {

@@ -14,12 +14,9 @@ const createFilterTemplate = (filters) => {
     return createFilterMarkup(filter);
   }).join(`\n`);
   return (
-    `<nav class="main-navigation">
-      <div class="main-navigation__items">
+    `<div class="main-navigation__items">
         ${filtersMarkup}
-      </div>
-      <a href="#stats" class="main-navigation__additional">Stats</a>
-    </nav>`
+      </div>`
   );
 };
 
@@ -37,10 +34,5 @@ export default class Filter extends AbstractComponent {
     this.getElement().querySelectorAll(`.main-navigation__item`).forEach((filter) => {
       filter.addEventListener(`click`, (evt) => handler(evt.target.id));
     });
-  }
-
-  setStatsClickHandler(handler) {
-    this.getElement().querySelector(`.main-navigation__additional`)
-    .addEventListener(`click`, handler);
   }
 }

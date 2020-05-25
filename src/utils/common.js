@@ -32,7 +32,6 @@ export const sortObject = (list) => {
       sortable.push([key, list[key]]);
     }
   }
-  // [["you",100],["me",75],["foo",116],["bar",15]]
 
   sortable.sort(function (a, b) {
     if (a[1] > b[1]) {
@@ -45,7 +44,6 @@ export const sortObject = (list) => {
       }
     }
   });
-  // [["bar",15],["me",75],["you",100],["foo",116]]
 
   let orderedList = {};
   for (let idx in sortable) {

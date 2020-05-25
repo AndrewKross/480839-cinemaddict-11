@@ -150,7 +150,8 @@ export default class PageController {
     const prevFilmsCount = this._showingFilmsCount;
     this._showingFilmsCount += SHOWING_FILMS_COUNT_BY_BUTTON;
     const filmsData = this._filmsModel.getFilms();
-    const sortedFilms = getSortedFilms(filmsData, this._sortListComponent.getSortType(), prevFilmsCount, this._showingFilmsCount);
+    const sortedFilms = getSortedFilms(filmsData, this._sortListComponent.getSortType(),
+        prevFilmsCount, this._showingFilmsCount);
 
     this._renderFilms(sortedFilms);
 
@@ -161,6 +162,7 @@ export default class PageController {
 
   _onFilterChange() {
     this._updateFilms(SHOWING_FILMS_COUNT_ON_START);
+    this._sortListComponent.returnToDefault();
   }
 
   _renderExtraFilms() {

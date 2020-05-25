@@ -14,6 +14,7 @@ export default class ProfileRating extends AbstractComponent {
     super();
     this._filmsModel = filmsModel;
   }
+
   getTemplate() {
     return createProfileRatingTemplate(this._filmsModel);
   }

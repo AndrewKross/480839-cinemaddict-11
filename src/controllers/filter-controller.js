@@ -44,9 +44,15 @@ export default class FilterController {
     return this._filterComponent;
   }
 
+  setFiltersChangeHandler(handler) {
+    this._filtersChangeHandler = handler;
+  }
+
   _onFilterChange(filterType) {
     this._filmsModel.setFilter(filterType);
     this._activeFilterType = filterType;
+    this.render();
+    this._filtersChangeHandler();
   }
 
   _onDataChange() {

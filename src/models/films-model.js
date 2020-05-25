@@ -94,6 +94,7 @@ export default class FilmsModel {
     } else if (watchedCount > 0) {
       return `novice`;
     }
+
     return ``;
   }
 

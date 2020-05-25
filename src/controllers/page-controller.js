@@ -32,7 +32,7 @@ const getSortedFilms = (films, sortType, from, to) => {
       sortedFilms = showingFilms.sort((a, b) => b.rating - a.rating);
       break;
     case SortType.DEFAULT:
-      sortedFilms = showingFilms;
+      sortedFilms = showingFilms.sort((a, b) => a.id - b.id);
       break;
   }
 
@@ -111,12 +111,14 @@ export default class PageController {
     const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
 
     if (isSuccess) {
-      [...this._showedFilmsControllers, ...this._topRatedFilmsControllers, ...this._mostCommentedFilmsControllers]
-          .forEach((controller) => {
-            if (controller.getFilmData().id === oldData.id) {
-              controller.render(newData);
-            }
-          });
+      [...this._showedFilmsControllers,
+        ...this._topRatedFilmsControllers,
+        ...this._mostCommentedFilmsControllers]
+      .forEach((controller) => {
+        if (controller.getFilmData().id === oldData.id) {
+          controller.render(newData);
+        }
+      });
     }
   }
 
@@ -133,7 +135,10 @@ export default class PageController {
   }
 
   _onViewChange() {
-    this._showedFilmsControllers.forEach((filmController) => filmController.setDefaultView());
+    [...this._showedFilmsControllers,
+      ...this._topRatedFilmsControllers,
+      ...this._mostCommentedFilmsControllers]
+    .forEach((filmController) => filmController.setDefaultView());
   }
 
   _onSortTypeChange(sortType) {

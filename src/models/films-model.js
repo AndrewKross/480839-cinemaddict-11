@@ -16,6 +16,7 @@ export default class FilmsModel {
   }
 
   getFilms() {
+    this._films.sort((a, b) => a.id - b.id);
     return getFilmsByFilter(this._films, this._activeFilterType);
   }
 

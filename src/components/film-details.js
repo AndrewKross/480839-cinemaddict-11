@@ -202,7 +202,7 @@ export default class FilmDetails extends AbstractSmartComponent {
   setNewCommentHandler() {
     const commentInput = this.getCommentInputElement();
     commentInput.addEventListener(`input`, () => {
-      this._newCommentTextValue = encode(commentInput.value);
+      this._newCommentTextValue = commentInput.value;
     });
     commentInput.addEventListener(`keydown`, (evt) => {
       if (evt.ctrlKey && evt.key === Keycodes.ENTER_KEY) {

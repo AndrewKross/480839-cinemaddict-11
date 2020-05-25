@@ -32,7 +32,13 @@ export default class Filter extends AbstractComponent {
 
   setFilterChangeHandler(handler) {
     this.getElement().querySelectorAll(`.main-navigation__item`).forEach((filter) => {
-      filter.addEventListener(`click`, (evt) => handler(evt.target.id));
+      filter.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        if (evt.target.tagName === `SPAN`) {
+          handler(evt.target.parentNode.id);
+        }
+        handler(evt.target.id);
+      });
     });
   }
 }

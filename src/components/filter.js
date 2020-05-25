@@ -3,7 +3,7 @@ import AbstractComponent from "./abstract-component.js";
 const createFilterMarkup = (filter) => {
   const {name, count, checked} = filter;
   const activeClass = `main-navigation__item--active`;
-  const counterMarkup = name !== `All movies` ? `<span class="main-navigation__item-count">` + count + `</span>` : ``;
+  const counterMarkup = name !== `All movies` ? `<span class="main-navigation__item-count">${count}</span>` : ``;
   return (
     `<a href="#${name}" id="${name}" class="main-navigation__item ${checked ? activeClass : ``}">${name}${counterMarkup}</a>`
   );

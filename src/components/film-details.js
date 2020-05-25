@@ -235,7 +235,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       ? this._newCommentTextValue : ``;
   }
 
-  onLoadCommentsError() {
+  showOnLoadCommentsError() {
     const errorMessage = `Unable to load comments. Please check your internet connection and try again.`;
     this.getElement().querySelector(`.film-details__comments-title`).textContent = errorMessage;
     this.disableFormElements();
@@ -270,25 +270,25 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   setCloseButtonClickHandler(cb) {
     this.getElement().querySelector(`.film-details__close-btn`)
-    .addEventListener(`click`, cb);
+      .addEventListener(`click`, cb);
     this._closeButtonHandler = cb;
   }
 
   setWatchlistClickHandler(cb) {
     this.getElement().querySelector(`.film-details__control-label--watchlist`)
-    .addEventListener(`click`, cb);
+      .addEventListener(`click`, cb);
     this._watchlistClickHandler = cb;
   }
 
   setWatchedClickHandler(cb) {
     this.getElement().querySelector(`.film-details__control-label--watched`)
-    .addEventListener(`click`, cb);
+      .addEventListener(`click`, cb);
     this._watchedClickHandler = cb;
   }
 
   setFavoriteClickHandler(cb) {
     this.getElement().querySelector(`.film-details__control-label--favorite`)
-    .addEventListener(`click`, cb);
+      .addEventListener(`click`, cb);
     this._favoriteClickHandler = cb;
   }
 }

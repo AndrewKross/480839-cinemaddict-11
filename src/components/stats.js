@@ -64,6 +64,9 @@ export default class Stats extends AbstractSmartComponent {
     super();
     this._filter = StatsFilter.ALL_TIME;
     this._filmsModel = filmsModel;
+
+    this.rerender = this.rerender.bind(this);
+    this._filmsModel.setDataChangeHandler(this.rerender);
   }
 
   getTemplate() {

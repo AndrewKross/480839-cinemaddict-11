@@ -6,7 +6,7 @@ export default class CommentsModel {
   }
 
   static parseComments(commentsData) {
-    const parsedComments = commentsData.map((comment) => {
+    return commentsData.map((comment) => {
       return {
         id: comment[`id`],
         author: comment[`author`],
@@ -15,7 +15,6 @@ export default class CommentsModel {
         emotion: comment[`emotion`],
       };
     });
-    return parsedComments;
   }
 
   static commentToRaw(comment) {

@@ -16,7 +16,7 @@ const checkStatus = (response) => {
   }
 };
 
-const API = class {
+export default class API {
   constructor(endPoint, authorization) {
     this._authorization = authorization;
     this._endPoint = endPoint;
@@ -24,14 +24,14 @@ const API = class {
 
   getFilms() {
     return this._load({url: `movies`})
-    .then((response) => response.json())
-    .then(FilmModel.parseFilms);
+      .then((response) => response.json())
+      .then(FilmModel.parseFilms);
   }
 
   getComments(id) {
     return this._load({url: `comments/${id}`})
-    .then((response) => response.json())
-    .then(CommentsModel.parseComments);
+      .then((response) => response.json())
+      .then(CommentsModel.parseComments);
   }
 
   updateFilm(id, data) {
@@ -41,8 +41,8 @@ const API = class {
       method: Method.PUT,
       body: JSON.stringify(data.toRAW()),
     })
-    .then((response) => response.json())
-    .then(FilmModel.parseFilm);
+      .then((response) => response.json())
+      .then(FilmModel.parseFilm);
   }
 
   addComment(filmData, commentData) {
@@ -75,7 +75,7 @@ const API = class {
       body: JSON.stringify(films),
       headers: new Headers({"Content-Type": `application/json`})
     })
-    .then((response) => response.json());
+      .then((response) => response.json());
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
@@ -87,6 +87,4 @@ const API = class {
         throw err;
       });
   }
-};
-
-export default API;
+}

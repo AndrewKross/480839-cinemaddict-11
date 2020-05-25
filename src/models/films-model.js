@@ -49,7 +49,7 @@ export default class FilmsModel {
   }
 
   getFilmsByWatched(periodName = StatsFilter.ALL_TIME) {
-    let filmsInHistory = this._films.filter((film) => film.inHistory);
+    const filmsInHistory = this._films.filter((film) => film.inHistory);
 
     if (periodName === StatsFilter.ALL_TIME) {
       return filmsInHistory;
@@ -58,20 +58,25 @@ export default class FilmsModel {
     const date = new Date();
 
     switch (periodName) {
-      case StatsFilter.YEAR:
+      case StatsFilter.YEAR: {
         date.setFullYear(date.getFullYear() - 1);
         break;
-      case StatsFilter.MONTH:
+      }
+      case StatsFilter.MONTH: {
         date.setMonth(date.getMonth() - 1);
         break;
-      case StatsFilter.WEEK:
+      }
+      case StatsFilter.WEEK: {
         date.setDate(date.getDate() - 7);
         break;
-      case StatsFilter.TODAY:
+      }
+      case StatsFilter.TODAY: {
         date.setDate(date.getDate() - 1);
         break;
-      default:
+      }
+      default: {
         return filmsInHistory;
+      }
     }
 
     return filmsInHistory.filter((item) => {
@@ -93,7 +98,7 @@ export default class FilmsModel {
   }
 
   getGenresStatistics(filter) {
-    let genres = {};
+    const genres = {};
 
     this.getFilmsByWatched(filter).forEach((film) => {
       film.genres.forEach((genre) => {
@@ -103,9 +108,7 @@ export default class FilmsModel {
       });
     });
 
-    let sortedGenres = sortObject(genres);
-
-    return sortedGenres;
+    return sortObject(genres);
   }
 
   getTopGenre(filter) {
@@ -129,7 +132,7 @@ export default class FilmsModel {
       return total + film.duration;
     }, 0);
 
-    const hours = parseInt(topDuration / MINUTES_PER_HOUR, 10);
+    const hours = topDuration / MINUTES_PER_HOUR;
     const minutes = topDuration - hours * MINUTES_PER_HOUR;
 
     return {

@@ -13,15 +13,18 @@ export const RenderPosition = {
 
 export const render = (container, component, place = RenderPosition.BEFOREEND) => {
   switch (place) {
-    case RenderPosition.AFTERBEGIN:
+    case RenderPosition.AFTERBEGIN: {
       container.prepend(component.getElement());
       break;
-    case RenderPosition.BEFOREEND:
+    }
+    case RenderPosition.BEFOREEND: {
       container.append(component.getElement());
       break;
-    case RenderPosition.BEFORE:
+    }
+    case RenderPosition.BEFORE: {
       container.before(component.getElement());
       break;
+    }
   }
 };
 

@@ -3,7 +3,7 @@ import momentDurationFormatSetup from 'moment-duration-format';
 import {EXTRA_FILMS_COUNT} from "../const";
 momentDurationFormatSetup(moment);
 
-export const getRandomInt = (min, max) => { // максимум не включается, минимум включается
+export const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
@@ -26,7 +26,7 @@ export const formatCommentDate = (date) => {
 };
 
 export const sortObject = (list) => {
-  let sortable = [];
+  const sortable = [];
   for (let key in list) {
     if (Object.prototype.hasOwnProperty.call(list, key)) {
       sortable.push([key, list[key]]);
@@ -45,7 +45,7 @@ export const sortObject = (list) => {
     }
   });
 
-  let orderedList = {};
+  const orderedList = {};
   for (let idx in sortable) {
     if (Object.prototype.hasOwnProperty.call(sortable, idx)) {
       orderedList[sortable[idx][0]] = sortable[idx][1];

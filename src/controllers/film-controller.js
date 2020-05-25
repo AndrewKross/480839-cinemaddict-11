@@ -51,6 +51,7 @@ export default class FilmController {
       evt.preventDefault();
       const newFilm = FilmModel.clone(this._filmData);
       newFilm.inHistory = !newFilm.inHistory;
+      newFilm.watchingDate = new Date();
       this._onDataChange(this._filmData, newFilm);
     });
 
@@ -87,6 +88,7 @@ export default class FilmController {
     this._filmDetailsComponent.setWatchedClickHandler(() => {
       const newFilm = FilmModel.clone(this._filmData);
       newFilm.inHistory = !newFilm.inHistory;
+      newFilm.watchingDate = new Date();
       this._onDataChange(this._filmData, newFilm);
     });
 
@@ -107,7 +109,7 @@ export default class FilmController {
         this._filmDetailsComponent.renderComments(this._commentsData);
       })
       .catch(() => {
-        this._filmDetailsComponent.onLoadCommentsError();
+        this._filmDetailsComponent.showOnLoadCommentsError();
       });
   }
 
@@ -135,39 +137,39 @@ export default class FilmController {
       commentComponent.getDeleteButton().disabled = true;
       commentComponent.getDeleteButton().textContent = `Deleting...`;
       this._apiWithProvider.deleteComment(oldData.id)
-      .then(() => {
-        this._commentsModel.removeComment(oldData.id);
-        this._commentsData = this._commentsModel.getComments();
-        this._filmDetailsComponent.renderComments(this._commentsData);
-        this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldData.id);
-        this._onDataChange(this._filmData);
-        this.render(this._filmData);
-      })
-      .catch(() => {
-        this.shakeComment(commentComponent);
-        commentComponent.getDeleteButton().disabled = false;
-        commentComponent.getDeleteButton().textContent = `Delete`;
-      });
+        .then(() => {
+          this._commentsModel.removeComment(oldData.id);
+          this._commentsData = this._commentsModel.getComments();
+          this._filmDetailsComponent.renderComments(this._commentsData);
+          this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldData.id);
+          this._onDataChange(this._filmData);
+          this.render(this._filmData);
+        })
+        .catch(() => {
+          this.shakeComment(commentComponent);
+          commentComponent.getDeleteButton().disabled = false;
+          commentComponent.getDeleteButton().textContent = `Delete`;
+        });
     } else {
       // добавление комментария
       this._filmDetailsComponent.disableFormElements();
       this._filmDetailsComponent.getCommentInputElement().style.outline = `none`;
       this._apiWithProvider.addComment(this._filmData, newData)
-      .then((loadedData) => {
-        this._filmData = loadedData.movie;
-        this._commentsModel.setComments(loadedData.comments);
-        this._commentsData = this._commentsModel.getComments();
-        this._filmDetailsComponent.renderComments(this._commentsData);
-        this._onDataChange(this._filmData);
-        this.render(this._filmData);
-      })
-      .catch(() => {
-        this.shakeNewComment(commentComponent);
-        this._filmDetailsComponent.getCommentInputElement().style.outline = `2px solid red`;
-      })
-      .then(() => {
-        this._filmDetailsComponent.enableFormElements();
-      });
+        .then((loadedData) => {
+          this._filmData = loadedData.movie;
+          this._commentsModel.setComments(loadedData.comments);
+          this._commentsData = this._commentsModel.getComments();
+          this._filmDetailsComponent.renderComments(this._commentsData);
+          this._onDataChange(this._filmData);
+          this.render(this._filmData);
+        })
+        .catch(() => {
+          this.shakeNewComment(commentComponent);
+          this._filmDetailsComponent.getCommentInputElement().style.outline = `2px solid red`;
+        })
+        .then(() => {
+          this._filmDetailsComponent.enableFormElements();
+        });
     }
   }
 

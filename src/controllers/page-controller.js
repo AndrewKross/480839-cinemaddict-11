@@ -2,10 +2,10 @@ import FilmsExtraComponent from "../components/films-extra.js";
 import ShowMoreButtonComponent from "../components/show-more-button.js";
 import NoFilmsComponent from "../components/no-films.js";
 import FilmController from "./film-controller.js";
-import SortListComponent, {SortType} from "../components/sort.js";
+import SortListComponent from "../components/sort.js";
 import {render, remove, RenderPosition} from "../utils/render.js";
 import {getTopRatedFilms, getMostCommentedFilms} from "../utils/common.js";
-import {SHOWING_FILMS_COUNT_BY_BUTTON, SHOWING_FILMS_COUNT_ON_START} from "../const.js";
+import {SHOWING_FILMS_COUNT_BY_BUTTON, SHOWING_FILMS_COUNT_ON_START, SortType} from "../const.js";
 
 const EXTRA_FILMS_TITLES = {
   topRated: `Top rated`,
@@ -25,15 +25,18 @@ const getSortedFilms = (films, sortType, from, to) => {
   const showingFilms = films.slice();
 
   switch (sortType) {
-    case SortType.DATE:
+    case SortType.DATE: {
       sortedFilms = showingFilms.sort((a, b) => b.release - a.release);
       break;
-    case SortType.RATING:
+    }
+    case SortType.RATING: {
       sortedFilms = showingFilms.sort((a, b) => b.rating - a.rating);
       break;
-    case SortType.DEFAULT:
+    }
+    case SortType.DEFAULT: {
       sortedFilms = showingFilms.sort((a, b) => a.id - b.id);
       break;
+    }
   }
 
   return sortedFilms.slice(from, to);
@@ -73,7 +76,9 @@ export default class PageController {
     }
 
     this._renderFilms(filmsData.slice(0, this._showingFilmsCount));
-    this._renderShowMoreButton(filmsData);
+    if (filmsData.length > 5) {
+      this._renderShowMoreButton();
+    }
     this._renderExtraFilms();
   }
 
@@ -103,8 +108,15 @@ export default class PageController {
 
   _updateFilms(count) {
     this._removeFilms();
-    this._renderFilms(this._filmsModel.getFilms().slice(0, count));
-    this._renderShowMoreButton();
+    const updatedFilmsData = this._filmsModel.getFilms();
+    this._renderFilms(updatedFilmsData.slice(0, count));
+    if (this._showMoreButtonComponent) {
+      remove(this._showMoreButtonComponent);
+    }
+
+    if (updatedFilmsData.length > 5) {
+      this._renderShowMoreButton();
+    }
   }
 
   _updateFilm(oldData, newData) {
@@ -148,7 +160,9 @@ export default class PageController {
 
     this._removeFilms();
     this._renderFilms(sortedFilms);
-    this._renderShowMoreButton();
+    if (sortedFilms > 5) {
+      this._renderShowMoreButton();
+    }
   }
 
   _onShowMoreButtonClick() {

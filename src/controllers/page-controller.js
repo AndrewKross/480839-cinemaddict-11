@@ -82,6 +82,16 @@ export default class PageController {
     this._renderExtraFilms();
   }
 
+  hide() {
+    this._container.hide();
+    this._sortListComponent.hide();
+  }
+
+  show() {
+    this._container.show();
+    this._sortListComponent.show();
+  }
+
   _removeFilms() {
     this._showedFilmsControllers.forEach((filmController) => filmController.destroy());
     this._showedFilmsControllers = [];
@@ -203,15 +213,5 @@ export default class PageController {
 
     render(container, this._topRatedFilmsComponent);
     render(container, this._mostCommentedFilmsComponent);
-  }
-
-  hide() {
-    this._container.hide();
-    this._sortListComponent.hide();
-  }
-
-  show() {
-    this._container.show();
-    this._sortListComponent.show();
   }
 }

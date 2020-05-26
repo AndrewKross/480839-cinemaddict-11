@@ -21,14 +21,6 @@ export default class FilmModel {
     this.comments = data[`comments`];
   }
 
-  static parseFilm(data) {
-    return new FilmModel(data);
-  }
-
-  static parseFilms(data) {
-    return data.map(FilmModel.parseFilm);
-  }
-
   toRAW() {
     return {
       "id": this.id,
@@ -57,6 +49,14 @@ export default class FilmModel {
       },
       "comments": this.comments
     };
+  }
+
+  static parseFilm(data) {
+    return new FilmModel(data);
+  }
+
+  static parseFilms(data) {
+    return data.map(FilmModel.parseFilm);
   }
 
   static clone(data) {

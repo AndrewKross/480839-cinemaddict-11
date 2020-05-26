@@ -2,7 +2,7 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import {render, remove} from "../utils/render.js";
 import {formatDuration} from "../utils/common.js";
 import CommentComponent from "../components/comment.js";
-import {Keycodes} from "../const.js";
+import {Keycode} from "../const.js";
 import {encode} from "he";
 import moment from "moment";
 
@@ -170,21 +170,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     });
   }
 
-  _setCommentsCount(value) {
-    this.getElement().querySelector(`.film-details__comments-count`).textContent = value.length;
-  }
-
   getComments() {
     return this._commentsData;
-  }
-
-  _removeAllComments() {
-    this._showedCommentsComponents.forEach((component) => remove(component));
-    this._showedCommentsComponents = [];
-  }
-
-  _getCommentsListElement() {
-    return this.getElement().querySelector(`.film-details__comments-list`);
   }
 
   getCommentInputElement() {
@@ -205,7 +192,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       this._newCommentTextValue = commentInput.value;
     });
     commentInput.addEventListener(`keydown`, (evt) => {
-      if (evt.ctrlKey && evt.key === Keycodes.ENTER_KEY) {
+      if (evt.ctrlKey && evt.key === Keycode.ENTER_KEY) {
         if (commentInput.value && this._emoji) {
           this._onCommentChange(null, {
             comment: encode(commentInput.value),
@@ -266,6 +253,19 @@ export default class FilmDetails extends AbstractSmartComponent {
         this.rerender();
       });
     });
+  }
+
+  _setCommentsCount(value) {
+    this.getElement().querySelector(`.film-details__comments-count`).textContent = value.length;
+  }
+
+  _removeAllComments() {
+    this._showedCommentsComponents.forEach((component) => remove(component));
+    this._showedCommentsComponents = [];
+  }
+
+  _getCommentsListElement() {
+    return this.getElement().querySelector(`.film-details__comments-list`);
   }
 
   setCloseButtonClickHandler(cb) {

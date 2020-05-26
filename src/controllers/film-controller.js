@@ -6,7 +6,7 @@ import FilmCardComponent from "../components/film-card.js";
 import CommentsModel from "../models/comments-model";
 import FilmModel from "../models/film-model.js";
 import {render, remove, replace} from "../utils/render.js";
-import {Keycodes, PopupMode, STORE_NAME} from "../const.js";
+import {Keycode, PopupMode, STORE_NAME} from "../const.js";
 import {AUTHORIZATION, END_POINT} from "../const.js";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
@@ -117,8 +117,35 @@ export default class FilmController {
     return this._filmData;
   }
 
+  destroy() {
+    remove(this._filmCardComponent);
+  }
+
+  setDefaultView() {
+    if (this._popupMode !== PopupMode.DEFAULT) {
+      remove(this._filmDetailsComponent);
+      this._popupMode = PopupMode.DEFAULT;
+    }
+  }
+
+  shakeNewComment() {
+    this._filmDetailsComponent.getNewCommentElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._filmDetailsComponent.getNewCommentElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  shakeComment(commentComponent) {
+    commentComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      commentComponent.getElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
   _closePopupOnEscPress(evt) {
-    if (evt.key === Keycodes.ESC_KEY) {
+    if (evt.key === Keycode.ESC_KEY) {
       this._closePopup();
     }
   }
@@ -171,32 +198,5 @@ export default class FilmController {
           this._filmDetailsComponent.enableFormElements();
         });
     }
-  }
-
-  destroy() {
-    remove(this._filmCardComponent);
-  }
-
-  setDefaultView() {
-    if (this._popupMode !== PopupMode.DEFAULT) {
-      remove(this._filmDetailsComponent);
-      this._popupMode = PopupMode.DEFAULT;
-    }
-  }
-
-  shakeNewComment() {
-    this._filmDetailsComponent.getNewCommentElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-
-    setTimeout(() => {
-      this._filmDetailsComponent.getNewCommentElement().style.animation = ``;
-    }, SHAKE_ANIMATION_TIMEOUT);
-  }
-
-  shakeComment(commentComponent) {
-    commentComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-
-    setTimeout(() => {
-      commentComponent.getElement().style.animation = ``;
-    }, SHAKE_ANIMATION_TIMEOUT);
   }
 }

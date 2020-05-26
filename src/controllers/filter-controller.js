@@ -40,10 +40,6 @@ export default class FilterController {
     }
   }
 
-  getFilterComponent() {
-    return this._filterComponent;
-  }
-
   setFiltersChangeHandler(handler) {
     this._filtersChangeHandler = handler;
   }

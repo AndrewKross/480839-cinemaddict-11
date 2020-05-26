@@ -13,7 +13,7 @@ export const SortType = {
   DEFAULT: `default`,
 };
 
-export const Keycodes = {
+export const Keycode = {
   ESC_KEY: `Escape`,
   ENTER_KEY: `Enter`,
 };

@@ -133,7 +133,7 @@ export default class FilmsModel {
       return total + film.duration;
     }, 0);
 
-    const hours = topDuration / MINUTES_PER_HOUR;
+    const hours = Math.trunc(topDuration / MINUTES_PER_HOUR);
     const minutes = topDuration - hours * MINUTES_PER_HOUR;
 
     return {

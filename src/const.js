@@ -1,7 +1,7 @@
 export const EXTRA_FILMS_COUNT = 2;
 export const SHOWING_FILMS_COUNT_ON_START = 5;
 export const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
-export const AUTHORIZATION = `Basic HfJ6w1U7a21sAjs3Y`;
+export const AUTHORIZATION = `Basic HfJ67a21sAjs3Y`;
 export const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
 export const STORE_PREFIX = `cinemaddict-localstorage`;
 export const STORE_VERSION = `v1`;
@@ -22,7 +22,7 @@ export const FilterType = {
   ALL: `All movies`,
   WATCHLIST: `Watchlist`,
   HISTORY: `History`,
-  FAVORITES: `Favorites`
+  FAVORITES: `Favorites`,
 };
 
 export const PopupMode = {

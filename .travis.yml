@@ -13,7 +13,7 @@ script:
 
 deploy:
   provider: pages
-  skip_cleanup: true
+  cleanup: true
   github-token: $travis
   local_dir: public
   on:

@@ -2,7 +2,7 @@ export default class FilmModel {
   constructor(data) {
     this.id = data[`id`];
     this.title = data[`film_info`][`title`];
-    this.genres = data[`film_info`][`genre`][0] ? data[`film_info`][`genre`] : [`Action`];
+    this.genres = data[`film_info`][`genre`][0] === undefined ? [`Action`] : data[`film_info`][`genre`];
     this.image = data[`film_info`][`poster`];
     this.age = data[`film_info`][`age_rating`];
     this.originalTitle = data[`film_info`][`alternative_title`];

@@ -13,8 +13,8 @@ script:
 
 deploy:
   provider: pages
-  cleanup: true
+  skip_cleanup: true
   github-token: $travis
-  project: ./public/
+  local_dir: public
   on:
     branch: master
